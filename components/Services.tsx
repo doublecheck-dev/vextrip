@@ -9,11 +9,11 @@ export default function Services() {
       <div className="w-full flex justify-center md:translate-y-[10%] translate-y-[10%] bottom-0 left-0 right-0 z-50">
         <div className="backdrop-blur-xl rounded-2xl shadow-2xl px-2 py-6 md:px-4 md:py-8 flex flex-wrap gap-4 md:gap-8 items-center justify-center max-w-full md:max-w-5xl border border-neutral-200">
           {[
-            { icon: <Hotel className="w-8 h-8 md:w-10 md:h-10 text-[#22c55e]" />, bg: "bg-[#22c55e]/20", label: "Hoteles", labelColor: "text-[#22c55e]", href: "#hoteles" },
-            { icon: <Utensils className="w-8 h-8 md:w-10 md:h-10 text-[#f59e42]" />, bg: "bg-[#f59e42]/20", label: "Restaurantes", labelColor: "text-[#f59e42]", href: "#restaurantes" },
-            { icon: <Camera className="w-8 h-8 md:w-10 md:h-10 text-[#38bdf8]" />, bg: "bg-[#38bdf8]/20", label: "Lugares Turísticos", labelColor: "text-[#38bdf8]", href: "#lugares" },
-            { icon: <PartyPopper className="w-8 h-8 md:w-10 md:h-10 text-[#e879f9]" />, bg: "bg-[#e879f9]/20", label: "Experiencias", labelColor: "text-[#e879f9]", href: "#experiencias" },
-            { icon: <MapPinned className="w-8 h-8 md:w-10 md:h-10 text-[#a78bfa]" />, bg: "bg-[#a78bfa]/20", label: "Guías Turísticos", labelColor: "text-[#a78bfa]", href: "#guias" },
+            { icon: <Hotel className="w-8 h-8 md:w-10 md:h-10 text-[#22c55e]" />, bg: "bg-[#22c55e]/20", label: "Hoteles", labelColor: "text-[#22c55e]", href: "/hoteles" },
+            { icon: <Utensils className="w-8 h-8 md:w-10 md:h-10 text-[#f59e42]" />, bg: "bg-[#f59e42]/20", label: "Restaurantes", labelColor: "text-[#f59e42]", href: "/restaurantes" },
+            { icon: <Camera className="w-8 h-8 md:w-10 md:h-10 text-[#38bdf8]" />, bg: "bg-[#38bdf8]/20", label: "Lugares Turísticos", labelColor: "text-[#38bdf8]", href: "/lugares" },
+            { icon: <PartyPopper className="w-8 h-8 md:w-10 md:h-10 text-[#e879f9]" />, bg: "bg-[#e879f9]/20", label: "Experiencias", labelColor: "text-[#e879f9]", href: "/experiencias" },
+            { icon: <MapPinned className="w-8 h-8 md:w-10 md:h-10 text-[#a78bfa]" />, bg: "bg-[#a78bfa]/20", label: "Guías Turísticos", labelColor: "text-[#a78bfa]", href: "/guias" },
           ].map((service, i) => (
             <a
               key={i}

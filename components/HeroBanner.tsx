@@ -50,23 +50,26 @@ export default function HeroBanner({ children }: { children: React.ReactNode }) 
 
   return (
     <section
-      className="w-full max-h-[70vh] md:max-h-[80vh] min-h-[400px] md:min-h-[600px] flex flex-col justify-center bg-cover bg-center relative transition-all duration-1000"
+      className="w-full max-h-[90vh] md:max-h-[85vh] min-h-[500px] sm:min-h-[600px] md:min-h-[700px] flex flex-col justify-center bg-cover bg-center relative transition-all duration-1000"
       style={{ backgroundImage: `url('${images[bgIndex]}')` }}
     >
       {/* Gradient just at the top of the image with gray-900 */}
       <div className="absolute top-0 left-0 w-full h-32 md:h-48 bg-gradient-to-b from-gray-900/90 via-gray-900/60 to-transparent pointer-events-none transition-all duration-1000" />
       {/* Fixed bottom gradient: stronger at bottom, transparent at top */}
       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/30 to-transparent transition-all duration-1000" />
-      <div className="relative z-10 flex flex-col items-center text-center text-white px-4 pt-16 md:pt-24">
-        <h1 className="text-4xl md:text-6xl font-extrabold mb-2 md:mb-4 drop-shadow-lg transition-opacity duration-700">
-          San Rafael
+      <div className="relative z-10 flex flex-col items-center text-center text-white gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 md:pt-36 lg:pt-40">
+        <h1 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight tracking-tight text-white drop-shadow-2xl transition-opacity duration-700 mb-2 sm:mb-4 md:mb-6" style={{ textShadow: '3px 3px 6px rgba(0,0,0,0.9), 1px 1px 3px rgba(0,0,0,0.7)' }}>
+          Imperdible en
         </h1>
+
         {/* Restaurante más destacado */}
-        <div className="w-full flex justify-center">
-          <div className="w-full max-w-2xl mx-auto my-12">
-            <div className="bg-emerald-50 rounded-xl shadow-xl flex flex-col md:flex-row items-center overflow-hidden">
-             
-              <div className="w-full md:w-1/2 h-56 relative">
+        <div className="w-full flex justify-center flex-col items-center gap-2 sm:gap-3 md:gap-4">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight tracking-wide drop-shadow-lg transition-opacity duration-700 -mt-2 sm:-mt-3 md:-mt-4">
+            San Rafael
+          </h2>
+          <div className="w-full max-w-sm sm:max-w-lg md:max-w-2xl mx-auto my-2 md:my-3">
+            <div className="bg-emerald-50 rounded-lg md:rounded-xl shadow-xl flex flex-col md:flex-row items-center overflow-hidden">
+              <div className="w-full md:w-1/2 h-48 sm:h-52 md:h-56 relative">
                 <Image
                   src={restaurants[0].image}
                   alt={restaurants[0].name}
@@ -76,20 +79,21 @@ export default function HeroBanner({ children }: { children: React.ReactNode }) 
                   priority
                 />
               </div>
-              <div className="p-8 flex flex-col items-center md:items-start w-full md:w-1/2">
-                <h3 className="text-2xl font-bold text-emerald-700 mb-2 flex items-center">
-                  {restaurants[0].name}
-                  <span className="ml-2 px-2 py-1 text-xs bg-emerald-500 text-white rounded-full font-bold align-middle">
+              <div className="p-4 sm:p-6 md:p-8 flex flex-col items-center md:items-start w-full md:w-1/2 space-y-3">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-emerald-700 leading-tight flex flex-col sm:flex-row items-center">
+                  <span className="text-center sm:text-left">{restaurants[0].name}</span>
+                  <span className="mt-2 sm:mt-0 sm:ml-3 px-3 py-1 text-xs bg-emerald-500 text-white rounded-full font-bold whitespace-nowrap">
                     Más destacado
                   </span>
                 </h3>
-                <p className="text-gray-700 text-center md:text-left">{restaurants[0].description}</p>
+                <p className="text-sm sm:text-base text-gray-700 text-center md:text-left leading-relaxed max-w-xs sm:max-w-sm md:max-w-none">
+                  {restaurants[0].description}
+                </p>
               </div>
             </div>
           </div>
         </div>
-        <div className="w-full flex flex-col items-center justify-center">
-
+        <div className="w-full flex flex-col items-center justify-center mt-4 md:mt-0">
           <div className="w-full flex justify-center">
             {children}
           </div>

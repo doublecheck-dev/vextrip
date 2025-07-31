@@ -53,9 +53,9 @@ export default function TourSlider() {
   ];
 
  return (
-    <section className="relative pb-8 pt-16 md:pb-16 md:pt-[7rem] bg-gradient-to-br from-sky-50 via-emerald-50 to-rose-50">
-      <div className="text-center mb-4 md:mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-emerald-700">Explore Touristic Places</h2>
+    <section className="relative pb-8 pt-24 sm:pt-28 md:pt-32 lg:pt-36 bg-gradient-to-br from-sky-50 via-emerald-50 to-rose-50">
+      <div className="text-center mb-6 sm:mb-8 md:mb-10 pt-8 sm:pt-12 md:pt-16">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-emerald-700">Explore Touristic Places</h2>
       </div>
       <div className="max-w-full md:max-w-5xl mx-auto relative px-2 md:px-0">
         <Swiper
@@ -64,42 +64,47 @@ export default function TourSlider() {
           centeredSlides={true}
           slidesPerView={1}
           breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
+            640: { slidesPerView: 1.2 },
+            768: { slidesPerView: 1.8 },
+            1024: { slidesPerView: 2.5 },
+            1280: { slidesPerView: 3 },
           }}
+          spaceBetween={20}
           loop={true}
           coverflowEffect={{
-            rotate: 30,
+            rotate: 25,
             stretch: 0,
-            depth: 100,
+            depth: 80,
             modifier: 1,
             slideShadows: true,
           }}
           autoplay={{
-            delay: 3000,
+            delay: 4000,
             disableOnInteraction: false,
           }}
-          pagination={{ clickable: true }}
+          pagination={{ 
+            clickable: true,
+            dynamicBullets: true 
+          }}
           modules={[EffectCoverflow, Autoplay, Pagination]}
-          className="w-full"
+          className="w-full pb-12 sm:pb-16"
           onSwiper={(swiper) => (swiperRef.current = swiper)}
         >
           {Array(3).fill(places).flat().map((place, i) => (
-            <SwiperSlide key={i}>
-              <div className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col relative">
-                <div className="relative w-full h-60 sm:h-72 md:h-96 lg:h-[32rem]">
+            <SwiperSlide key={i} className="pb-4">
+              <div className="bg-white rounded-xl shadow-xl overflow-hidden flex flex-col relative transform transition-transform duration-300 hover:scale-105">
+                <div className="relative w-full h-48 sm:h-60 md:h-72 lg:h-80">
                   <img
                     src={place.image}
                     alt={place.title}
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                   {/* Modern gradient at the bottom */}
-                  <div className={`absolute bottom-0 left-0 w-full h-20 sm:h-32 md:h-48 lg:h-60 bg-gradient-to-t ${gradients[i % gradients.length]} scale-110`} />
+                  <div className={`absolute bottom-0 left-0 w-full h-16 sm:h-20 md:h-28 lg:h-32 bg-gradient-to-t ${gradients[i % gradients.length]} scale-110`} />
                   {/* Title and description at the bottom over the gradient */}
-                  <div className="absolute bottom-0 left-0 w-full px-2 sm:px-4 pb-4 sm:pb-8 z-10">
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-white drop-shadow mb-1 sm:mb-2">{place.title}</h3>
-                    <p className="text-xs sm:text-base md:text-lg text-gray-200 drop-shadow">{place.description}</p>
+                  <div className="absolute bottom-0 left-0 w-full px-3 sm:px-4 md:px-6 pb-3 sm:pb-4 md:pb-6 z-10">
+                    <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-white drop-shadow-lg mb-1 sm:mb-2">{place.title}</h3>
+                    <p className="text-xs sm:text-sm md:text-base text-gray-200 drop-shadow-md leading-tight">{place.description}</p>
                   </div>
                 </div>
               </div>
@@ -109,17 +114,21 @@ export default function TourSlider() {
         {/* Arrow buttons with modern colors */}
         <button
           onClick={() => swiperRef.current?.slidePrev()}
-          className="absolute top-1/2 left-2 md:left-0 transform -translate-y-1/2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full p-2 md:p-3 shadow-lg transition z-20"
+          className="absolute top-1/2 left-1 sm:left-2 md:left-0 transform -translate-y-1/2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full p-2 sm:p-3 shadow-xl transition-all duration-300 hover:scale-110 z-20"
           aria-label="Anterior"
         >
-          &#8592;
+          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
         </button>
         <button
           onClick={() => swiperRef.current?.slideNext()}
-          className="absolute top-1/2 right-2 md:right-0 transform -translate-y-1/2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full p-2 md:p-3 shadow-lg transition z-20"
+          className="absolute top-1/2 right-1 sm:right-2 md:right-0 transform -translate-y-1/2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full p-2 sm:p-3 shadow-xl transition-all duration-300 hover:scale-110 z-20"
           aria-label="Siguiente"
         >
-          &#8594;
+          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
         </button>
       </div>
     </section>
