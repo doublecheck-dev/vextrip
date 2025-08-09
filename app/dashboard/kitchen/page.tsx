@@ -1,37 +1,23 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Clock, CheckCircle, XCircle, RefreshCw, Filter, Search, Bell } from 'lucide-react';
+import { Clock, CheckCircle, RefreshCw, Search, Bell } from 'lucide-react';
 import KitchenOrderCard from '@/components/KitchenOrderCard';
 
-interface CartOrder {
-  id: string;
-  userId: number;
-  userName: string;
-  userEmail: string;
-  restaurantId: number;
-  restaurantName: string;
-  items: Array<{
-    id: number;
-    name: string;
-    price: number;
-    quantity: number;
-    image: string;
-  }>;
-  totalPrice: number;
-  deliveryInfo: {
-    address: string;
-    phone: string;
-    date: string;
-    time: string;
-    notes: string;
-  };
-  status: 'pending' | 'confirmed' | 'preparing' | 'delivered';
-  timestamp: string;
+interface OrderCounts {
+  pending: number;
+  confirmed: number;
+  preparing: number;
+  delivered: number;
+}
+
+interface Restaurant {
+  id: number;
+  name: string;
 }
 
 export default function KitchenDashboard() {
-  const [orders, setOrders] = useState<CartOrder[]>([]);
-  const [filteredOrders, setFilteredOrders] = useState<CartOrder[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
+  const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,8 +28,16 @@ export default function KitchenDashboard() {
     setIsLoading(true);
     try {
       const storedOrders = JSON.parse(localStorage.getItem('tourex_orders') || '[]');
-      setOrders(storedOrders);
-      console.log('🍳 Loaded orders for kitchen:', storedOrders.length);
+      // Ensure orders have tableId property for compatibility
+      const ordersWithTableId = storedOrders.map((order: any) => ({
+        ...order,
+        deliveryInfo: {
+          ...order.deliveryInfo,
+          tableId: order.deliveryInfo.tableId || extractTableId(order)
+        }
+      }));
+      setOrders(ordersWithTableId);
+      console.log('🍳 Loaded orders for kitchen:', ordersWithTableId.length);
     } catch (error) {
       console.error('Error loading orders:', error);
     } finally {
@@ -51,8 +45,36 @@ export default function KitchenDashboard() {
     }
   };
 
-  // Get unique restaurants
-  const restaurants = Array.from(new Set(orders.map(order => order.restaurantName)));
+  // Extract table ID from order data
+  const extractTableId = (order: any): string => {
+    const notes = order.deliveryInfo?.notes;
+    const address = order.deliveryInfo?.address;
+
+    if (notes) {
+      const tableIdMatch = notes.match(/Table ID: ([^|]+)/) || notes.match(/TableRef: ([^|]+)/);
+      if (tableIdMatch) return tableIdMatch[1].trim();
+    }
+
+    if (address?.includes('Mesa')) {
+      const addressMatch = address.match(/Mesa\s*(\d+)/i);
+      if (addressMatch) return `mesa-${addressMatch[1]}`;
+    }
+
+    return '';
+  };
+
+  // Get unique restaurants with proper typing
+  const getUniqueRestaurants = (): Restaurant[] => {
+    const uniqueRestaurants = new Map<number, string>();
+    
+    orders.forEach(order => {
+      uniqueRestaurants.set(order.restaurantId, order.restaurantName);
+    });
+
+    return Array.from(uniqueRestaurants.entries()).map(([id, name]) => ({ id, name }));
+  };
+
+  const restaurants = getUniqueRestaurants();
 
   // Filter orders based on selected filters
   useEffect(() => {
@@ -93,7 +115,7 @@ export default function KitchenDashboard() {
   }, []);
 
   // Update order status
-  const updateOrderStatus = (orderId: string, newStatus: CartOrder['status']) => {
+  const updateOrderStatus = (orderId: string, newStatus: 'pending' | 'confirmed' | 'preparing' | 'delivered') => {
     try {
       const updatedOrders = orders.map(order => 
         order.id === orderId ? { ...order, status: newStatus } : order
@@ -107,16 +129,13 @@ export default function KitchenDashboard() {
     }
   };
 
-  // Get order counts by status
-  const getOrderCounts = () => {
-    const counts = {
-      pending: filteredOrders.filter(order => order.status === 'pending').length,
-      confirmed: filteredOrders.filter(order => order.status === 'confirmed').length,
-      preparing: filteredOrders.filter(order => order.status === 'preparing').length,
-      delivered: filteredOrders.filter(order => order.status === 'delivered').length,
-    };
-    return counts;
-  };
+  // Get order counts with proper typing
+  const getOrderCounts = (): OrderCounts => ({
+    pending: filteredOrders.filter(order => order.status === 'pending').length,
+    confirmed: filteredOrders.filter(order => order.status === 'confirmed').length,
+    preparing: filteredOrders.filter(order => order.status === 'preparing').length,
+    delivered: filteredOrders.filter(order => order.status === 'delivered').length,
+  });
 
   const orderCounts = getOrderCounts();
 
@@ -152,14 +171,16 @@ export default function KitchenDashboard() {
         </div>
       </div>
 
-      {/* Restaurant Quick Links */}
       <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Restaurant Quick Links */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Acceso rápido por restaurante</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {restaurants.map((restaurant) => {
               const restaurantOrderCount = orders.filter(order => order.restaurantId === restaurant.id).length;
-              const pendingCount = orders.filter(order => order.restaurantId === restaurant.id && order.status === 'pending').length;
+              const pendingCount = orders.filter(order => 
+                order.restaurantId === restaurant.id && order.status === 'pending'
+              ).length;
               
               return (
                 <a
@@ -171,7 +192,9 @@ export default function KitchenDashboard() {
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-sm text-gray-600">{restaurantOrderCount} pedidos</span>
                     {pendingCount > 0 && (
-                      <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">{pendingCount}</span>
+                      <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                        {pendingCount}
+                      </span>
                     )}
                   </div>
                 </a>
@@ -195,8 +218,8 @@ export default function KitchenDashboard() {
               >
                 <option value="all">Todos los restaurantes</option>
                 {restaurants.map((restaurant) => (
-                  <option key={restaurant} value={restaurant}>
-                    {restaurant}
+                  <option key={restaurant.id} value={restaurant.name}>
+                    {restaurant.name}
                   </option>
                 ))}
               </select>
@@ -292,7 +315,9 @@ export default function KitchenDashboard() {
           ) : filteredOrders.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-lg shadow-sm">
               <p className="text-gray-600 text-lg">No hay pedidos que mostrar</p>
-              <p className="text-gray-400 text-sm mt-2">Los pedidos aparecerán aquí cuando los clientes realicen compras</p>
+              <p className="text-gray-400 text-sm mt-2">
+                Los pedidos aparecerán aquí cuando los clientes realicen compras
+              </p>
             </div>
           ) : (
             filteredOrders.map((order) => (

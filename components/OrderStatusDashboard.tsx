@@ -85,7 +85,11 @@ export default function OrderStatusDashboard({ restaurantId, restaurantName, tab
       setIsVisible(true);
       
       // Expand the confirmed order automatically
-      setExpandedOrders(prev => new Set([...prev, confirmationOrder.id]));
+      setExpandedOrders(prev => {
+        const newSet = new Set(prev);
+        newSet.add(confirmationOrder.id);
+        return newSet;
+      });
       
       // Auto-scroll to the order after a brief delay
       setTimeout(() => {
@@ -129,7 +133,11 @@ export default function OrderStatusDashboard({ restaurantId, restaurantName, tab
           setFocusedOrderId(orderId);
           
           // Auto-expand the new order
-          setExpandedOrders(prev => new Set([...prev, orderId]));
+          setExpandedOrders(prev => {
+            const newSet = new Set(prev);
+            newSet.add(orderId);
+            return newSet;
+          });
         }, 500);
       }
     };

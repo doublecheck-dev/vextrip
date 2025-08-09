@@ -148,9 +148,9 @@ export default function CartModal({
         });
     };
 
-    const handleGuestInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setGuestInfo({
-            ...guestInfo,
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setDeliveryInfo({
+            ...deliveryInfo,
             [e.target.name]: e.target.value
         });
     };
@@ -331,7 +331,7 @@ export default function CartModal({
                                         type="text"
                                         name="name"
                                         value={guestInfo.name}
-                                        onChange={handleGuestInputChange}
+                                        onChange={handleInputChange}
                                         placeholder="Tu nombre completo"
                                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent"
                                         required
@@ -345,7 +345,7 @@ export default function CartModal({
                                         type="email"
                                         name="email"
                                         value={guestInfo.email}
-                                        onChange={handleGuestInputChange}
+                                        onChange={handleInputChange}
                                         placeholder="tu@email.com"
                                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent"
                                         required
@@ -555,7 +555,7 @@ export default function CartModal({
                                         <select
                                             name="time"
                                             value={deliveryInfo.time}
-                                            onChange={handleInputChange}
+                                            onChange={handleSelectChange}
                                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent"
                                             required
                                         >

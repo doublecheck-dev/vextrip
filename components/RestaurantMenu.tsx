@@ -18,6 +18,14 @@ interface MenuItem {
     category: string;
     rating: number;
     reviews: number;
+    restaurantId?: number;
+    createdBy?: {
+        userId: number;
+        userName: string;
+        userEmail: string;
+    };
+    timestamp?: string;
+    status?: string;
 }
 
 interface MenuCategory {
@@ -648,7 +656,7 @@ export default function RestaurantMenu({ restaurantId, restaurantName, goToMenuP
                                                     <p className="font-medium text-gray-800">{item.name}</p>
                                                     <p className="text-sm text-gray-600">${item.price} • {item.category}</p>
                                                     <p className="text-xs text-gray-500">
-                                                        Por: {item.createdBy?.userName || 'Usuario'}
+                                                        Por: {(item as any).createdBy?.userName || 'Usuario'}
                                                     </p>
                                                 </div>
                                             </div>
