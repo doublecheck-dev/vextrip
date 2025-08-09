@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from "react";
-import Services from "./Services";
 import Image from "next/image";
 
 // Add restaurant data here

@@ -203,10 +203,12 @@ export default function NavBar() {
 
         {/* Logo - Centered */}
         <div className="flex items-center">
-          <img src="/logo.png" alt="Logo" className="w-8 h-8 xl:w-10 xl:h-10 mr-2 xl:mr-3" />
-          <h1 className="text-2xl xl:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg">
-            Tourex
-          </h1>
+          <a href="/" className="flex items-center hover:opacity-80 transition-opacity">
+            <img src="/logo.png" alt="Logo" className="w-8 h-8 xl:w-10 xl:h-10 mr-2 xl:mr-3" />
+            <h1 className="text-2xl xl:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg">
+              Tourex
+            </h1>
+          </a>
         </div>
 
         {/* Search Bar & User/Login */}
