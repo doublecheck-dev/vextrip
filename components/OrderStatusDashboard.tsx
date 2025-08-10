@@ -23,6 +23,7 @@ interface CartOrder {
     date: string;
     time: string;
     notes: string;
+    tableId?: string; // Add optional tableId property
   };
   status: 'pending' | 'confirmed' | 'preparing' | 'delivered';
   timestamp: string;
@@ -159,21 +160,40 @@ export default function OrderStatusDashboard({ restaurantId, restaurantName, tab
         
         // If table filter is provided, only show orders for that table
         if (tableFilter) {
-          // Check multiple ways the table ID might be stored in the order
+          console.log(`🔍 Filtering orders for table: ${tableFilter}`);
+          
+          // Enhanced table filtering logic
           const isTableOrder = 
             // Check if table ID is in the address
             order.deliveryInfo.address.includes(tableFilter) ||
-            // Check if table ID is in the notes
+            // Check if table ID is in the notes with various patterns
             order.deliveryInfo.notes?.includes(`Table ID: ${tableFilter}`) ||
-            // Check if table ID matches any part of the order info
-            order.deliveryInfo.notes?.includes(tableFilter) ||
-            // Check for mesa- prefix patterns
-            (tableFilter.startsWith('mesa-') && order.deliveryInfo.notes?.includes(tableFilter));
+            order.deliveryInfo.notes?.includes(`TableRef: ${tableFilter}`) ||
+            order.deliveryInfo.notes?.includes(`TableNumber: ${tableFilter}`) ||
+            order.deliveryInfo.notes?.includes(`Mesa Numero: ${tableFilter.replace('mesa-', '')}`) ||
+            // Check direct table ID match (with safe optional chaining)
+            order.deliveryInfo.tableId === tableFilter ||
+            // Check for various mesa patterns
+            (tableFilter.startsWith('mesa-') && (
+              order.deliveryInfo.notes?.includes(tableFilter) ||
+              order.deliveryInfo.address.includes(tableFilter) ||
+              (order.deliveryInfo.tableId && order.deliveryInfo.tableId.includes(tableFilter))
+            )) ||
+            // Check for table number extraction
+            (() => {
+              const tableNumber = tableFilter.replace(/mesa-\d+-/, '').replace('mesa-', '');
+              return order.deliveryInfo.notes?.includes(`Mesa #${tableNumber}`) ||
+                     order.deliveryInfo.address.includes(`Mesa ${tableNumber}`) ||
+                     order.deliveryInfo.notes?.includes(`Table#${tableNumber}`);
+            })();
           
           if (!isTableOrder) {
-            console.log(`🔍 Order ${order.id} not matching table ${tableFilter}`);
-            console.log('Order address:', order.deliveryInfo.address);
-            console.log('Order notes:', order.deliveryInfo.notes);
+            console.log(`❌ Order ${order.id} not matching table ${tableFilter}`);
+            console.log('Order details:', {
+              address: order.deliveryInfo.address,
+              notes: order.deliveryInfo.notes,
+              tableId: order.deliveryInfo.tableId
+            });
             return false;
           }
           

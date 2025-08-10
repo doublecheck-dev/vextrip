@@ -134,6 +134,8 @@ export default function TablePage({ params }: TablePageProps) {
             goToMenuPage={false}
             restaurantId={restaurant.id}
             restaurantName={restaurant.name}
+            tableId={params.tableId}
+            tableName={table.name}
           />
         </div>
       </div>

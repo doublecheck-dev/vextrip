@@ -38,9 +38,17 @@ interface RestaurantMenuProps {
     restaurantId: number;
     restaurantName: string;
     goToMenuPage?: boolean; // Optional prop to control navigation
+    tableId?: string;
+    tableName?: string; // Optional prop for table name
 }
 
-export default function RestaurantMenu({ restaurantId, restaurantName, goToMenuPage }: RestaurantMenuProps) {
+export default function RestaurantMenu({ 
+    restaurantId, 
+    restaurantName, 
+    goToMenuPage,
+    tableId,
+    tableName 
+}: RestaurantMenuProps) {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [cart, setCart] = useState<{ [key: string]: number }>({});
     const [isCartModalOpen, setIsCartModalOpen] = useState(false);
@@ -849,8 +857,9 @@ export default function RestaurantMenu({ restaurantId, restaurantName, goToMenuP
                 restaurantId={restaurantId}
                 restaurantName={restaurantName}
                 onClearCart={clearCart}
+                tableId={tableId}
+                tableName={tableName}
                 onOrderCreated={(orderId: string) => {
-                    // Trigger dashboard focus
                     console.log('Order created in menu:', orderId);
                 }}
             />

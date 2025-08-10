@@ -86,7 +86,8 @@ export default function AddTableModal({
 
     try {
       const currentUser = JSON.parse(localStorage.getItem('tourex_user') || '{}');
-      const tableId = `table_${restaurantId}_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+      // Generate table ID with consistent format for filtering
+      const tableId = `mesa-${restaurantId}-${Date.now()}`;
       
       const newTable: Table = {
         id: tableId,
@@ -108,6 +109,12 @@ export default function AddTableModal({
       (newTable as any).qrCodeUrl = qrCodeUrl;
 
       saveTableToStorage(newTable);
+      
+      // Update localStorage with new table for immediate availability
+      const existingTables = JSON.parse(localStorage.getItem('tourex_tables') || '[]');
+      const updatedTables = [...existingTables];
+      localStorage.setItem('tourex_tables', JSON.stringify(updatedTables));
+      
       onTableAdded(newTable);
 
       setSubmitMessage('✅ Mesa agregada exitosamente con código QR');
