@@ -1,6 +1,4 @@
 'use client';
-import Image from "next/image";
-import { Star, Plus, Minus, ShoppingCart, ChefHat, Table, Eye, Trash2, QrCode } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import CartModal from "./CartModal";
@@ -8,6 +6,11 @@ import AddMenuItemModal from "./AddMenuItemModal";
 import AddTableModal from "./AddTableModal";
 import AddCategoryModal from "./AddCategoryModal";
 import TableQRModal from "./TableQRModal";
+import MenuHeader from "./organisms/MenuHeader";
+import ManagementView from "./organisms/ManagementView";
+import CategoryFilter from "./molecules/CategoryFilter";
+import MenuGrid from "./organisms/MenuGrid";
+import StatCard from "./atoms/StatCard";
 
 interface MenuItem {
     id: number;
@@ -491,342 +494,82 @@ export default function RestaurantMenu({
     return (
         <>
             <section className="bg-white rounded-xl p-6 shadow-sm">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold text-gray-800">Nuestro Menú</h2>
-                    <div className="flex items-center gap-3">
-                        {/* Management buttons for logged users */}
-                        {currentUser && (
-                            <>
-                                <button
-                                    onClick={() => setShowManagementView(!showManagementView)}
-                                    className={`px-4 py-2 rounded-full flex items-center gap-2 transition-colors ${
-                                        showManagementView 
-                                            ? 'bg-gray-500 text-white hover:bg-gray-600' 
-                                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                    }`}
-                                    title="Ver modo administración"
-                                >
-                                    <Eye className="w-4 h-4" />
-                                    <span className="hidden sm:inline">
-                                        {showManagementView ? 'Ocultar Admin' : 'Ver Admin'}
-                                    </span>
-                                </button>
+                <MenuHeader
+                    currentUser={currentUser}
+                    showManagementView={showManagementView}
+                    cartItemsCount={getTotalItems()}
+                    cartTotal={getTotalPrice()}
+                    onToggleManagementView={() => setShowManagementView(!showManagementView)}
+                    onOpenAddItemModal={() => setIsAddItemModalOpen(true)}
+                    onOpenAddTableModal={() => setIsAddTableModalOpen(true)}
+                    onOpenAddCategoryModal={() => setIsAddCategoryModalOpen(true)}
+                    onOpenCartModal={openCartModal}
+                />
 
-                                <button
-                                    onClick={() => setIsAddItemModalOpen(true)}
-                                    className="bg-green-500 text-white px-4 py-2 rounded-full flex items-center gap-2 hover:bg-green-600 transition-colors"
-                                    title="Agregar nuevo plato al menú"
-                                >
-                                    <ChefHat className="w-4 h-4" />
-                                    <span className="hidden sm:inline">Agregar Menú</span>
-                                </button>
-                                
-                                <button
-                                    onClick={() => setIsAddTableModalOpen(true)}
-                                    className="bg-blue-500 text-white px-4 py-2 rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors"
-                                    title="Agregar mesa"
-                                >
-                                    <Table className="w-4 h-4" />
-                                    <span className="hidden sm:inline">Agregar Mesa</span>
-                                </button>
-
-                                <button
-                                    onClick={() => setIsAddCategoryModalOpen(true)}
-                                    className="bg-purple-500 text-white px-4 py-2 rounded-full flex items-center gap-2 hover:bg-purple-600 transition-colors"
-                                    title="Agregar categoría"
-                                >
-                                    <Plus className="w-4 h-4" />
-                                    <span className="hidden sm:inline">Agregar Categoría</span>
-                                </button>
-                            </>
-                        )}
-
-                        {/* Cart Button */}
-                        {getTotalItems() > 0 && (
-                            <button
-                                onClick={openCartModal}
-                                className="bg-orange-500 text-white px-4 py-2 rounded-full flex items-center gap-2 hover:bg-orange-600 transition-colors"
-                            >
-                                <ShoppingCart className="w-4 h-4" />
-                                <span>{getTotalItems()} items - ${getTotalPrice()}</span>
-                            </button>
-                        )}
-                    </div>
-                </div>
-
-                {/* Management View */}
                 {showManagementView && currentUser && (
-                    <div className="mb-8 space-y-6">
-                        {/* Tables Management */}
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                            <h3 className="text-lg font-bold text-blue-800 mb-3 flex items-center gap-2">
-                                <Table className="w-5 h-5" />
-                                Gestión de Mesas ({userTables.length})
-                            </h3>
-                            {userTables.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                    {userTables.map((table) => (
-                                        <div key={table.id} className="bg-white p-3 rounded-lg border">
-                                            <div className="flex justify-between items-start mb-2">
-                                                <div>
-                                                    <p className="font-medium text-gray-800">{table.name}</p>
-                                                    <p className="text-sm text-gray-600">
-                                                        {table.capacity} personas • {table.location}
-                                                    </p>
-                                                    <span className={`text-xs px-2 py-1 rounded-full ${
-                                                        table.status === 'available' ? 'bg-green-100 text-green-800' :
-                                                        table.status === 'occupied' ? 'bg-red-100 text-red-800' :
-                                                        table.status === 'reserved' ? 'bg-yellow-100 text-yellow-800' :
-                                                        'bg-gray-100 text-gray-800'
-                                                    }`}>
-                                                        {table.status}
-                                                    </span>
-                                                </div>
-                                                <button
-                                                    onClick={() => deleteTable(table.id)}
-                                                    className="text-red-500 hover:text-red-700 p-1"
-                                                    title="Eliminar mesa"
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                </button>
-                                            </div>
-                                            <div className="flex gap-2 mt-3">
-                                                <button
-                                                    onClick={() => showTableQR(table)}
-                                                    className="flex-1 bg-blue-500 text-white py-2 px-3 rounded text-xs hover:bg-blue-600 transition-colors flex items-center justify-center gap-1"
-                                                >
-                                                    <QrCode className="w-3 h-3" />
-                                                    Ver QR
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-blue-600 text-sm">No hay mesas configuradas</p>
-                            )}
-                        </div>
-
-                        {/* Categories Management */}
-                        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                            <h3 className="text-lg font-bold text-purple-800 mb-3 flex items-center gap-2">
-                                <Plus className="w-5 h-5" />
-                                Gestión de Categorías ({userCategories.length})
-                            </h3>
-                            {userCategories.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                    {userCategories.map((category) => (
-                                        <div key={category.id} className="bg-white p-3 rounded-lg border flex justify-between items-center">
-                                            <div className="flex items-center gap-3">
-                                                <div 
-                                                    className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm"
-                                                    style={{ backgroundColor: category.color }}
-                                                >
-                                                    {category.icon}
-                                                </div>
-                                                <div>
-                                                    <p className="font-medium text-gray-800">{category.name}</p>
-                                                    <p className="text-sm text-gray-600">{category.description}</p>
-                                                </div>
-                                            </div>
-                                            <button
-                                                onClick={() => deleteCategory(category.id)}
-                                                className="text-red-500 hover:text-red-700 p-1"
-                                                title="Eliminar categoría"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-purple-600 text-sm">No hay categorías personalizadas</p>
-                            )}
-                        </div>
-
-                        {/* Menu Items Management */}
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                            <h3 className="text-lg font-bold text-green-800 mb-3 flex items-center gap-2">
-                                <ChefHat className="w-5 h-5" />
-                                Gestión de Platos de la Comunidad ({userSubmittedItems.length})
-                            </h3>
-                            {userSubmittedItems.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    {userSubmittedItems.map((item) => (
-                                        <div key={item.id} className="bg-white p-3 rounded-lg border flex justify-between items-center">
-                                            <div className="flex items-center gap-3">
-                                                <img 
-                                                    src={item.image} 
-                                                    alt={item.name}
-                                                    className="w-12 h-12 object-cover rounded-lg"
-                                                />
-                                                <div>
-                                                    <p className="font-medium text-gray-800">{item.name}</p>
-                                                    <p className="text-sm text-gray-600">${item.price} • {item.category}</p>
-                                                    <p className="text-xs text-gray-500">
-                                                        Por: {(item as any).createdBy?.userName || 'Usuario'}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <button
-                                                onClick={() => deleteMenuItem(item.id)}
-                                                className="text-red-500 hover:text-red-700 p-1"
-                                                title="Eliminar plato"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-green-600 text-sm">No hay platos de la comunidad</p>
-                            )}
-                        </div>
-                    </div>
+                    <ManagementView
+                        userTables={userTables}
+                        userCategories={userCategories}
+                        userSubmittedItems={userSubmittedItems}
+                        onDeleteTable={deleteTable}
+                        onDeleteCategory={deleteCategory}
+                        onDeleteMenuItem={deleteMenuItem}
+                        onShowTableQR={showTableQR}
+                    />
                 )}
 
-                {/* Show statistics */}
+                {/* Statistics */}
                 {(userSubmittedItems.length > 0 || userTables.length > 0 || userCategories.length > 0) && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                         {userSubmittedItems.length > 0 && (
-                            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                                <p className="text-green-800 text-sm">
-                                    🍽️ <strong>{userSubmittedItems.length}</strong> platos de la comunidad
-                                </p>
-                            </div>
+                            <StatCard
+                                icon="🍽️"
+                                count={userSubmittedItems.length}
+                                label="platos de la comunidad"
+                                bgColor="bg-green-50 border-green-200"
+                                textColor="text-green-800"
+                            />
                         )}
                         {userTables.length > 0 && (
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                                <p className="text-blue-800 text-sm">
-                                    🪑 <strong>{userTables.length}</strong> mesas configuradas
-                                </p>
-                            </div>
+                            <StatCard
+                                icon="🪑"
+                                count={userTables.length}
+                                label="mesas configuradas"
+                                bgColor="bg-blue-50 border-blue-200"
+                                textColor="text-blue-800"
+                            />
                         )}
                         {userCategories.length > 0 && (
-                            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                                <p className="text-purple-800 text-sm">
-                                    🏷️ <strong>{userCategories.length}</strong> categorías personalizadas
-                                </p>
-                            </div>
+                            <StatCard
+                                icon="🏷️"
+                                count={userCategories.length}
+                                label="categorías personalizadas"
+                                bgColor="bg-purple-50 border-purple-200"
+                                textColor="text-purple-800"
+                            />
                         )}
                     </div>
                 )}
 
-                {/* Category Filter - Enhanced with user categories */}
-                <div className="flex flex-wrap gap-2 mb-6 border-b pb-4">
-                    {dynamicMenuCategories.map((category) => {
-                        const userCategory = userCategories.find(cat => cat.id === category.id);
-                        return (
-                            <button
-                                key={category.id}
-                                onClick={() => setSelectedCategory(category.id)}
-                                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
-                                    selectedCategory === category.id
-                                        ? userCategory 
-                                            ? 'text-white border-2 border-opacity-50'
-                                            : 'bg-orange-500 text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
-                                style={userCategory && selectedCategory === category.id ? {
-                                    backgroundColor: userCategory.color,
-                                    borderColor: userCategory.color
-                                } : {}}
-                            >
-                                {userCategory && <span>{userCategory.icon}</span>}
-                                {category.name} ({category.count})
-                            </button>
-                        );
-                    })}
-                </div>
+                <CategoryFilter
+                    categories={dynamicMenuCategories}
+                    userCategories={userCategories}
+                    selectedCategory={selectedCategory}
+                    onCategoryChange={setSelectedCategory}
+                />
 
-                {/* Menu Items Grid - Enhanced with delete option in management view */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {filteredItems.map((item) => (
-                        <div key={item.id} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-                            <div className="relative h-48">
-                                <Image
-                                    src={item.image}
-                                    alt={item.name}
-                                    fill
-                                    className="object-cover"
-                                />
-                                <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1">
-                                    <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                                    <span className="text-xs font-medium">{item.rating}</span>
-                                </div>
-
-                                {/* Show if item was user-submitted */}
-                                {userSubmittedItems.some(userItem => userItem.id === item.id) && (
-                                    <div className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                                        👨‍🍳 Comunidad
-                                    </div>
-                                )}
-
-                                {/* Delete button in management view */}
-                                {showManagementView && currentUser && userSubmittedItems.some(userItem => userItem.id === item.id) && (
-                                    <button
-                                        onClick={() => deleteMenuItem(item.id)}
-                                        className="absolute bottom-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
-                                        title="Eliminar plato"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
-                                )}
-                            </div>
-
-                            <div className="p-4">
-                                <h3 className="font-bold text-gray-800 mb-2">{item.name}</h3>
-                                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
-
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <span className="text-xl font-bold text-orange-600">${item.price}</span>
-                                        <div className="text-xs text-gray-500">
-                                            {item.reviews} reseñas
-                                        </div>
-                                    </div>
-
-                                    {goToMenuPage ? (
-                                        <Link href={`/restaurantes/${restaurantId}/menu`}
-                                            className="text-sm text-orange-500 hover:underline">
-                                            Ver Menú Completo
-                                        </Link>
-                                    ) :
-
-                                        <div className="flex items-center gap-2">
-                                            {cart[item.id] > 0 ? (
-                                                <div className="flex items-center gap-2">
-                                                    <button
-                                                        onClick={() => removeFromCart(item.id)}
-                                                        className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
-                                                    >
-                                                        <Minus className="w-4 h-4" />
-                                                    </button>
-                                                    <span className="font-medium w-8 text-center">{cart[item.id]}</span>
-                                                    <button
-                                                        onClick={() => addToCart(item.id)}
-                                                        className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors"
-                                                    >
-                                                        <Plus className="w-4 h-4" />
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <button
-                                                    onClick={() => addToCart(item.id)}
-                                                    className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-2"
-                                                >
-                                                    <Plus className="w-4 h-4" />
-                                                    Agregar
-                                                </button>
-                                            )}
-                                        </div>
-                                    }
-
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                <MenuGrid
+                    items={filteredItems}
+                    cart={cart}
+                    userSubmittedItems={userSubmittedItems}
+                    showManagementView={showManagementView}
+                    currentUser={currentUser}
+                    goToMenuPage={goToMenuPage}
+                    restaurantId={restaurantId}
+                    onAddToCart={addToCart}
+                    onRemoveFromCart={removeFromCart}
+                    onDeleteMenuItem={deleteMenuItem}
+                />
 
                 {/* View Full Menu Button */}
                 <div className="text-center mt-8">
@@ -848,7 +591,7 @@ export default function RestaurantMenu({
                 </div>
             </section>
 
-            {/* Cart Modal */}
+            {/* Modals */}
             <CartModal
                 isOpen={isCartModalOpen}
                 onClose={closeCartModal}
