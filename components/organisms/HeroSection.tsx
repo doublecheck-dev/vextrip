@@ -1,7 +1,7 @@
 import BackgroundPattern from '../molecules/BackgroundPattern';
 import FloatingNavigation from '../molecules/FloatingNavigation';
-import HeroContent from '../molecules/HeroContent';
 import ScrollIndicator from '../atoms/ScrollIndicator';
+import HeroContent from '../molecules/HeroContent';
 
 interface HeroSectionProps {
   title: string;
@@ -40,12 +40,15 @@ export default function HeroSection({
       />
 
       <HeroContent
-        title={title}
-        subtitle={subtitle}
-        description={description}
-        rating={rating}
-        category={category}
-        showBadge={showBadge}
+        restaurant={{
+          id: 1,
+          name: title,
+          location: subtitle,
+          openHours: description,
+          reservationRequired: false,
+        }}
+        currentUser={null}
+        onScrollToReservation={() => {}}
       />
 
       {showScrollIndicator && <ScrollIndicator />}

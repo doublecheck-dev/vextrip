@@ -1,38 +1,43 @@
-import RestaurantBadge from '../atoms/RestaurantBadge';
+import HeroInfo from './HeroInfo';
+import HeroActions from './HeroActions';
 
 interface HeroContentProps {
-  title: string;
-  subtitle: string;
-  description: string;
-  rating: number;
-  category: string;
-  showBadge?: boolean;
+  restaurant: {
+    id: number;
+    name: string;
+    location: string;
+    openHours: string;
+    reservationRequired: boolean;
+  };
+  currentUser: any;
+  onScrollToReservation: () => void;
 }
 
 export default function HeroContent({ 
-  title, 
-  subtitle, 
-  description, 
-  rating, 
-  category,
-  showBadge = true 
+  restaurant, 
+  currentUser, 
+  onScrollToReservation 
 }: HeroContentProps) {
   return (
-    <div className="relative pt-16 text-center">
-      <div className="max-w-5xl mx-auto px-4">
-        {showBadge && (
-          <RestaurantBadge rating={rating} category={category} />
-        )}
+    <div className="absolute inset-0 flex items-end">
+      <div className="w-full p-8 pb-16">
+        <div className="max-w-7xl mx-auto text-white">
+          <h1 className="text-5xl md:text-7xl font-black mb-6 drop-shadow-2xl leading-tight">
+            {restaurant?.name}
+          </h1>
 
-        <h1 className="text-5xl md:text-7xl font-black mb-6 drop-shadow-2xl leading-tight">
-          {title}
-        </h1>
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 opacity-90">
-          {subtitle}
-        </h2>
-        <p className="text-xl md:text-2xl opacity-80 mb-8 max-w-2xl mx-auto">
-          {description}
-        </p>
+          <HeroInfo 
+            location={restaurant?.location}
+            openHours={restaurant?.openHours}
+          />
+
+          <HeroActions
+            restaurantId={restaurant?.id}
+            reservationRequired={restaurant?.reservationRequired}
+            currentUser={currentUser}
+            onScrollToReservation={onScrollToReservation}
+          />
+        </div>
       </div>
     </div>
   );
