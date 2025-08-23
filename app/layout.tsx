@@ -3,7 +3,7 @@ import NavBar from "@/components/NavBar";
 import "@/styles/globals.css";
 
 export const metadata = {
-  title: "Tourex - Turismo en San Rafael",
+  title: "vextrip - Turismo en San Rafael",
   description: "Descubre los mejores hoteles, restaurantes, lugares turísticos y experiencias en San Rafael, Mendoza.",
 };
 

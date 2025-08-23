@@ -366,7 +366,7 @@ export default function GuiasPage() {
       <WhatsAppQR 
         phoneNumber="+57 312 685-3970"
         message="Hola! Me interesa contratar los servicios de un guía turístico en San Rafael. ¿Podrían brindarme información sobre los guías disponibles y sus especialidades?"
-        businessName="Guías TourEx"
+        businessName="Guías vextrip"
       />
     </div>
   );

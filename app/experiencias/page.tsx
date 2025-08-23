@@ -240,7 +240,7 @@ export default function ExperienciasPage() {
         <WhatsAppQR 
           phoneNumber="+57 312 685-3970"
           message="Hola! Me interesa conocer más sobre las experiencias turísticas disponibles en San Rafael. ¿Podrían brindarme información sobre los tours y actividades?"
-          businessName="Experiencias TourEx"
+          businessName="Experiencias vextrip"
         />
       </div>
     </div>

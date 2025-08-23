@@ -91,7 +91,7 @@ export default function CartModal({
 
     const loadAvailableTables = () => {
         try {
-            const allTables = JSON.parse(localStorage.getItem('tourex_tables') || '[]');
+            const allTables = JSON.parse(localStorage.getItem('vextrip_tables') || '[]');
             const restaurantTables = allTables.filter(
                 (table: any) => table.restaurantId === restaurantId && table.status === 'available'
             );
@@ -165,7 +165,7 @@ export default function CartModal({
     };
 
     useEffect(() => {
-        const userData = localStorage.getItem('tourex_user');
+        const userData = localStorage.getItem('vextrip_user');
         if (userData) {
             try {
                 setCurrentUser(JSON.parse(userData));
@@ -213,7 +213,7 @@ export default function CartModal({
 
     const saveOrderToStorage = (order: CartOrder) => {
         try {
-            const existingOrders = JSON.parse(localStorage.getItem('tourex_orders') || '[]');
+            const existingOrders = JSON.parse(localStorage.getItem('vextrip_orders') || '[]');
             existingOrders.push(order);
 
             // Keep only last 50 orders
@@ -221,7 +221,7 @@ export default function CartModal({
                 existingOrders.splice(0, existingOrders.length - 50);
             }
 
-            localStorage.setItem('tourex_orders', JSON.stringify(existingOrders));
+            localStorage.setItem('vextrip_orders', JSON.stringify(existingOrders));
             console.log('📦 Order saved to localStorage:', order);
         } catch (error) {
             console.error('Error saving order:', error);

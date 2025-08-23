@@ -52,9 +52,9 @@ export default function AddTableModal({
 
   const saveTableToStorage = (table: Table) => {
     try {
-      const existingTables = JSON.parse(localStorage.getItem('tourex_tables') || '[]');
+      const existingTables = JSON.parse(localStorage.getItem('vextrip_tables') || '[]');
       existingTables.push(table);
-      localStorage.setItem('tourex_tables', JSON.stringify(existingTables));
+      localStorage.setItem('vextrip_tables', JSON.stringify(existingTables));
       console.log('🪑 Table saved to localStorage:', table);
     } catch (error) {
       console.error('Error saving table:', error);
@@ -85,7 +85,7 @@ export default function AddTableModal({
     setSubmitMessage('');
 
     try {
-      const currentUser = JSON.parse(localStorage.getItem('tourex_user') || '{}');
+      const currentUser = JSON.parse(localStorage.getItem('vextrip_user') || '{}');
       // Generate table ID with consistent format for filtering
       const tableId = `mesa-${restaurantId}-${Date.now()}`;
       
@@ -99,7 +99,7 @@ export default function AddTableModal({
         createdBy: {
           userId: currentUser.id || 0,
           userName: currentUser.name || 'Usuario',
-          userEmail: currentUser.email || 'usuario@tourex.com'
+          userEmail: currentUser.email || 'usuario@vextrip.com'
         },
         timestamp: new Date().toISOString()
       };
@@ -111,9 +111,9 @@ export default function AddTableModal({
       saveTableToStorage(newTable);
       
       // Update localStorage with new table for immediate availability
-      const existingTables = JSON.parse(localStorage.getItem('tourex_tables') || '[]');
+      const existingTables = JSON.parse(localStorage.getItem('vextrip_tables') || '[]');
       const updatedTables = [...existingTables];
-      localStorage.setItem('tourex_tables', JSON.stringify(updatedTables));
+      localStorage.setItem('vextrip_tables', JSON.stringify(updatedTables));
       
       onTableAdded(newTable);
 

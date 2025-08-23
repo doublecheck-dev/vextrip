@@ -30,7 +30,7 @@ interface QRRecord {
 export default function WhatsAppQR({ 
   phoneNumber, 
   message = "Hola, me interesa conocer más sobre sus servicios turísticos en San Rafael",
-  businessName = "TourEx San Rafael"
+  businessName = "vextrip San Rafael"
 }: WhatsAppQRProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [qrSize, setQrSize] = useState(220);
@@ -49,7 +49,7 @@ export default function WhatsAppQR({
 
   // Get current user from localStorage
   useEffect(() => {
-    const userData = localStorage.getItem('tourex_user');
+    const userData = localStorage.getItem('vextrip_user');
     if (userData) {
       try {
         setCurrentUser(JSON.parse(userData));
@@ -75,7 +75,7 @@ export default function WhatsAppQR({
       };
 
       // Get existing records
-      const existingRecords = JSON.parse(localStorage.getItem('tourex_qr_records') || '[]');
+      const existingRecords = JSON.parse(localStorage.getItem('vextrip_qr_records') || '[]');
       
       // Add new record
       existingRecords.push(record);
@@ -86,7 +86,7 @@ export default function WhatsAppQR({
       }
       
       // Save back to localStorage
-      localStorage.setItem('tourex_qr_records', JSON.stringify(existingRecords));
+      localStorage.setItem('vextrip_qr_records', JSON.stringify(existingRecords));
       
       console.log('📝 QR Record saved:', {
         action,

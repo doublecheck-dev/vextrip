@@ -32,7 +32,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
   const restaurant = restaurants.find(r => r.id === parseInt(params.id));
 
   useEffect(() => {
-    const userData = localStorage.getItem('tourex_user');
+    const userData = localStorage.getItem('vextrip_user');
     if (userData) {
       try {
         setCurrentUser(JSON.parse(userData));
@@ -153,7 +153,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
       <WhatsAppQR
         phoneNumber="+57 312 685-3970"
         message={`Hola! Me interesa hacer una reserva en ${restaurant.name}. ¿Podrían brindarme información sobre disponibilidad y el menú?`}
-        businessName={`${restaurant.name} - TourEx`}
+        businessName={`${restaurant.name} - vextrip`}
       />
     </div>
   );

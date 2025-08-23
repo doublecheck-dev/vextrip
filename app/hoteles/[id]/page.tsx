@@ -234,7 +234,7 @@ export default function HotelDetailPage({ params }: { params: { id: string } }) 
       <WhatsAppQR 
         phoneNumber="+57 312 685-3970"
         message={`Hola! Me interesa hacer una reserva en ${hotel.name}. ¿Podrían brindarme información sobre disponibilidad y tarifas?`}
-        businessName={`${hotel.name} - TourEx`}
+        businessName={`${hotel.name} - vextrip`}
       />
     </div>
   );

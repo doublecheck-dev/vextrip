@@ -96,7 +96,7 @@ export default function AddMenuItemModal({
   ];
 
   useEffect(() => {
-    const userData = localStorage.getItem('tourex_user');
+    const userData = localStorage.getItem('vextrip_user');
     if (userData) {
       try {
         setCurrentUser(JSON.parse(userData));
@@ -122,7 +122,7 @@ export default function AddMenuItemModal({
 
   const saveMenuItemToStorage = (menuItem: MenuItem) => {
     try {
-      const existingItems = JSON.parse(localStorage.getItem('tourex_menu_items') || '[]');
+      const existingItems = JSON.parse(localStorage.getItem('vextrip_menu_items') || '[]');
       existingItems.push(menuItem);
       
       // Keep only last 100 items
@@ -130,7 +130,7 @@ export default function AddMenuItemModal({
         existingItems.splice(0, existingItems.length - 100);
       }
       
-      localStorage.setItem('tourex_menu_items', JSON.stringify(existingItems));
+      localStorage.setItem('vextrip_menu_items', JSON.stringify(existingItems));
       console.log('🍽️ Menu item saved to localStorage:', menuItem);
     } catch (error) {
       console.error('Error saving menu item:', error);

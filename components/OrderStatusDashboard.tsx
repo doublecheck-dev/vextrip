@@ -48,7 +48,7 @@ export default function OrderStatusDashboard({ restaurantId, restaurantName, tab
   const [focusedOrderId, setFocusedOrderId] = useState<string | null>(null);
 
   useEffect(() => {
-    const userData = localStorage.getItem('tourex_user');
+    const userData = localStorage.getItem('vextrip_user');
     if (userData) {
       try {
         setCurrentUser(JSON.parse(userData));
@@ -155,7 +155,7 @@ export default function OrderStatusDashboard({ restaurantId, restaurantName, tab
 
   const loadUserOrders = () => {
     try {
-      const allOrders = JSON.parse(localStorage.getItem('tourex_orders') || '[]');
+      const allOrders = JSON.parse(localStorage.getItem('vextrip_orders') || '[]');
       
       // Filter orders for this restaurant and user (including guest orders)
       let userOrders = allOrders.filter((order: CartOrder) => {

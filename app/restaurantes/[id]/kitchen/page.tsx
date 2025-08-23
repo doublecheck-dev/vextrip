@@ -59,7 +59,7 @@ export default function RestaurantKitchenDashboard({ params }: { params: { id: s
   const loadOrders = () => {
     setIsLoading(true);
     try {
-      const storedOrders = JSON.parse(localStorage.getItem('tourex_orders') || '[]');
+      const storedOrders = JSON.parse(localStorage.getItem('vextrip_orders') || '[]');
       // Filter only orders for this restaurant
       const restaurantOrders = storedOrders.filter((order: CartOrder) => order.restaurantId === restaurantId);
       setOrders(restaurantOrders);
@@ -108,7 +108,7 @@ export default function RestaurantKitchenDashboard({ params }: { params: { id: s
   const updateOrderStatus = (orderId: string, newStatus: CartOrder['status']) => {
     try {
       // Load all orders from storage
-      const allOrders = JSON.parse(localStorage.getItem('tourex_orders') || '[]');
+      const allOrders = JSON.parse(localStorage.getItem('vextrip_orders') || '[]');
       
       // Update the specific order
       const updatedOrders = allOrders.map((order: CartOrder) => 
@@ -116,7 +116,7 @@ export default function RestaurantKitchenDashboard({ params }: { params: { id: s
       );
       
       // Save back to storage
-      localStorage.setItem('tourex_orders', JSON.stringify(updatedOrders));
+      localStorage.setItem('vextrip_orders', JSON.stringify(updatedOrders));
       
       // Update local state
       const updatedRestaurantOrders = orders.map(order => 

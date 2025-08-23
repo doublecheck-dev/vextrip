@@ -267,7 +267,7 @@ export default function RestaurantesPage() {
 			<WhatsAppQR 
 				phoneNumber="+57 312 685-3970"
 				message="Hola! Me interesa conocer más sobre los restaurantes recomendados en San Rafael. ¿Podrían brindarme información sobre opciones gastronómicas?"
-				businessName="Gastronomía TourEx"
+				businessName="Gastronomía vextrip"
 			/>
 		</div>
 	);

@@ -221,7 +221,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
       <WhatsAppQR 
         phoneNumber="+57 312 685-3970"
         message={`Hola! Me interesa hacer una reserva en ${restaurant.name}. ¿Podrían brindarme información sobre disponibilidad y el menú?`}
-        businessName={`${restaurant.name} - TourEx`}
+        businessName={`${restaurant.name} - vextrip`}
       />
     </div>
   );

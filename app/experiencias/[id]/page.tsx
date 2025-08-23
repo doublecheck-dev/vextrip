@@ -265,7 +265,7 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
       <WhatsAppQR 
         phoneNumber="+57 312 685-3970"
         message={`Hola! Me interesa reservar la experiencia "${experience.name}". ¿Podrían brindarme más información sobre disponibilidad y precios?`}
-        businessName={`${experience.name} - TourEx`}
+        businessName={`${experience.name} - vextrip`}
       />
     </div>
   );

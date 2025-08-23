@@ -19,7 +19,7 @@ export default function Home() {
       <WhatsAppQR 
         phoneNumber="+57 312 685-3970"
         message="Hola! Me interesa conocer más sobre los tours y servicios turísticos en San Rafael. ¿Podrían brindarme más información?"
-        businessName="TourEx San Rafael"
+        businessName="vextrip San Rafael"
       />
     </>
   );

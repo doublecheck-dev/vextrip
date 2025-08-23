@@ -27,7 +27,7 @@ export default function KitchenDashboard() {
   const loadOrders = () => {
     setIsLoading(true);
     try {
-      const storedOrders = JSON.parse(localStorage.getItem('tourex_orders') || '[]');
+      const storedOrders = JSON.parse(localStorage.getItem('vextrip_orders') || '[]');
       // Ensure orders have tableId property for compatibility
       const ordersWithTableId = storedOrders.map((order: any) => ({
         ...order,
@@ -122,7 +122,7 @@ export default function KitchenDashboard() {
       );
       
       setOrders(updatedOrders);
-      localStorage.setItem('tourex_orders', JSON.stringify(updatedOrders));
+      localStorage.setItem('vextrip_orders', JSON.stringify(updatedOrders));
       console.log(`📋 Order ${orderId} updated to ${newStatus}`);
     } catch (error) {
       console.error('Error updating order status:', error);

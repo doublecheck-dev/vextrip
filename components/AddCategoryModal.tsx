@@ -58,9 +58,9 @@ export default function AddCategoryModal({
 
   const saveCategoryToStorage = (category: Category) => {
     try {
-      const existingCategories = JSON.parse(localStorage.getItem('tourex_categories') || '[]');
+      const existingCategories = JSON.parse(localStorage.getItem('vextrip_categories') || '[]');
       existingCategories.push(category);
-      localStorage.setItem('tourex_categories', JSON.stringify(existingCategories));
+      localStorage.setItem('vextrip_categories', JSON.stringify(existingCategories));
       console.log('🏷️ Category saved to localStorage:', category);
     } catch (error) {
       console.error('Error saving category:', error);
@@ -79,7 +79,7 @@ export default function AddCategoryModal({
     setSubmitMessage('');
 
     try {
-      const currentUser = JSON.parse(localStorage.getItem('tourex_user') || '{}');
+      const currentUser = JSON.parse(localStorage.getItem('vextrip_user') || '{}');
       
       const newCategory: Category = {
         id: `category_${restaurantId}_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
@@ -91,7 +91,7 @@ export default function AddCategoryModal({
         createdBy: {
           userId: currentUser.id || 0,
           userName: currentUser.name || 'Usuario',
-          userEmail: currentUser.email || 'usuario@tourex.com'
+          userEmail: currentUser.email || 'usuario@vextrip.com'
         },
         timestamp: new Date().toISOString()
       };

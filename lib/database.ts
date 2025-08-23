@@ -10,7 +10,7 @@ interface User {
   provider?: 'email' | 'google' | 'facebook' | 'tiktok' | 'instagram';
 }
 
-interface TourexDB extends DBSchema {
+interface vextripDB extends DBSchema {
   users: {
     key: number;
     value: User;
@@ -26,11 +26,11 @@ interface TourexDB extends DBSchema {
   };
 }
 
-let dbPromise: Promise<IDBPDatabase<TourexDB>>;
+let dbPromise: Promise<IDBPDatabase<vextripDB>>;
 
 export const initDB = () => {
   if (!dbPromise) {
-    dbPromise = openDB<TourexDB>('TourexDB', 1, {
+    dbPromise = openDB<vextripDB>('vextripDB', 1, {
       upgrade(db) {
         // Users table
         const userStore = db.createObjectStore('users', {

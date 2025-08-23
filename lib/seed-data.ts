@@ -135,6 +135,6 @@ export const logAllUsers = async () => {
 export const exposeToWindow = () => {
   if (typeof window !== 'undefined') {
     (window as any).seedTestUsers = seedTestUsers;
-    (window as any).logTourexUsers = logAllUsers;
+    (window as any).logvextripUsers = logAllUsers;
   }
 };

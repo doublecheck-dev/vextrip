@@ -306,7 +306,7 @@ export default function HotelesPage() {
 			<WhatsAppQR 
 				phoneNumber="+57 312 685-3970"
 				message="Hola! Me interesa conocer las opciones de alojamiento en San Rafael. ¿Podrían brindarme información sobre hoteles y hospedajes disponibles?"
-				businessName="Alojamiento TourEx"
+				businessName="Alojamiento vextrip"
 			/>
 		</div>
 	);

@@ -62,8 +62,8 @@ export default function NavBar() {
       const sessionId = `mock_session_${Date.now()}`;
       
       // Set local storage
-      localStorage.setItem('tourex_session', sessionId);
-      localStorage.setItem('tourex_user', JSON.stringify(mockUserData));
+      localStorage.setItem('vextrip_session', sessionId);
+      localStorage.setItem('vextrip_user', JSON.stringify(mockUserData));
 
       // Update current user state immediately
       setCurrentUser(mockUserData);
@@ -72,8 +72,8 @@ export default function NavBar() {
       console.log('👤 Logged in as:', mockUserData.name, '(' + mockUserData.email + ')');
       console.log('📱 Current user state:', mockUserData);
       console.log('💾 localStorage data:', {
-        session: localStorage.getItem('tourex_session'),
-        user: localStorage.getItem('tourex_user')
+        session: localStorage.getItem('vextrip_session'),
+        user: localStorage.getItem('vextrip_user')
       });
       
       return mockUserData;
@@ -84,8 +84,8 @@ export default function NavBar() {
 
   const checkUserSession = async () => {
     try {
-      const sessionId = localStorage.getItem('tourex_session');
-      const userData = localStorage.getItem('tourex_user');
+      const sessionId = localStorage.getItem('vextrip_session');
+      const userData = localStorage.getItem('vextrip_user');
       
       console.log('🔍 Checking user session...');
       console.log('Session ID:', sessionId);
@@ -99,8 +99,8 @@ export default function NavBar() {
         } catch (parseError) {
           console.error('Error parsing user data:', parseError);
           // Clear invalid data
-          localStorage.removeItem('tourex_session');
-          localStorage.removeItem('tourex_user');
+          localStorage.removeItem('vextrip_session');
+          localStorage.removeItem('vextrip_user');
           setCurrentUser(null);
         }
       } else {
@@ -117,8 +117,8 @@ export default function NavBar() {
     try {
       console.log('🚪 Logging out user...');
       
-      localStorage.removeItem('tourex_session');
-      localStorage.removeItem('tourex_user');
+      localStorage.removeItem('vextrip_session');
+      localStorage.removeItem('vextrip_user');
       setCurrentUser(null);
       setIsUserMenuOpen(false);
       
@@ -170,8 +170,8 @@ export default function NavBar() {
   // Debug current user state and localStorage
   useEffect(() => {
     console.log('🔄 Current user state changed:', currentUser);
-    console.log('💾 localStorage session:', localStorage.getItem('tourex_session'));
-    console.log('💾 localStorage user:', localStorage.getItem('tourex_user'));
+    console.log('💾 localStorage session:', localStorage.getItem('vextrip_session'));
+    console.log('💾 localStorage user:', localStorage.getItem('vextrip_user'));
   }, [currentUser]);
 
   return (
@@ -206,7 +206,7 @@ export default function NavBar() {
           <a href="/" className="flex items-center hover:opacity-80 transition-opacity">
             <img src="/logo.png" alt="Logo" className="w-8 h-8 xl:w-10 xl:h-10 mr-2 xl:mr-3" />
             <h1 className="text-2xl xl:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg">
-              Tourex
+              vextrip
             </h1>
           </a>
         </div>

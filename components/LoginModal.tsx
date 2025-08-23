@@ -71,7 +71,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     try {
       if (isLogin) {
         // Login user - check localStorage
-        const storedUsers = JSON.parse(localStorage.getItem('tourex_users') || '[]');
+        const storedUsers = JSON.parse(localStorage.getItem('vextrip_users') || '[]');
         const user = storedUsers.find((u: any) => 
           u.email.toLowerCase() === formData.email.toLowerCase() && 
           u.password === formData.password
@@ -84,11 +84,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           // Update last login
           user.lastLogin = new Date().toISOString();
           const updatedUsers = storedUsers.map((u: any) => u.id === user.id ? user : u);
-          localStorage.setItem('tourex_users', JSON.stringify(updatedUsers));
+          localStorage.setItem('vextrip_users', JSON.stringify(updatedUsers));
           
           // Set session data
-          localStorage.setItem('tourex_session', sessionId);
-          localStorage.setItem('tourex_user', JSON.stringify({
+          localStorage.setItem('vextrip_session', sessionId);
+          localStorage.setItem('vextrip_user', JSON.stringify({
             id: user.id,
             name: user.name,
             email: user.email
@@ -106,7 +106,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         }
       } else {
         // Register user - save to localStorage
-        const storedUsers = JSON.parse(localStorage.getItem('tourex_users') || '[]');
+        const storedUsers = JSON.parse(localStorage.getItem('vextrip_users') || '[]');
         
         // Check if user already exists
         const existingUser = storedUsers.find((u: any) => 
@@ -131,7 +131,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         
         // Save to localStorage
         storedUsers.push(newUser);
-        localStorage.setItem('tourex_users', JSON.stringify(storedUsers));
+        localStorage.setItem('vextrip_users', JSON.stringify(storedUsers));
         
         setSuccess('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.');
         console.log('✅ User registered successfully:', newUser.email);
@@ -159,7 +159,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       const mockEmail = `usuario.${provider}@${provider}.com`;
       const mockName = `Usuario ${provider.charAt(0).toUpperCase() + provider.slice(1)}`;
       
-      const storedUsers = JSON.parse(localStorage.getItem('tourex_users') || '[]');
+      const storedUsers = JSON.parse(localStorage.getItem('vextrip_users') || '[]');
       
       // Check if social user exists
       let user = storedUsers.find((u: any) => u.email === mockEmail);
@@ -177,19 +177,19 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         };
         
         storedUsers.push(user);
-        localStorage.setItem('tourex_users', JSON.stringify(storedUsers));
+        localStorage.setItem('vextrip_users', JSON.stringify(storedUsers));
         console.log('✅ New social user created:', user);
       } else {
         // Update last login
         user.lastLogin = new Date().toISOString();
         const updatedUsers = storedUsers.map((u: any) => u.id === user.id ? user : u);
-        localStorage.setItem('tourex_users', JSON.stringify(updatedUsers));
+        localStorage.setItem('vextrip_users', JSON.stringify(updatedUsers));
       }
       
       // Create session
       const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      localStorage.setItem('tourex_session', sessionId);
-      localStorage.setItem('tourex_user', JSON.stringify({
+      localStorage.setItem('vextrip_session', sessionId);
+      localStorage.setItem('vextrip_user', JSON.stringify({
         id: user.id,
         name: user.name,
         email: user.email
@@ -251,7 +251,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           <p className="text-gray-600 text-sm">
             {isLogin 
               ? 'Accede a tu cuenta para disfrutar de todas las funciones' 
-              : 'Únete a TourEx y descubre San Rafael'
+              : 'Únete a vextrip y descubre San Rafael'
             }
           </p>
         </div>

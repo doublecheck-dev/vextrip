@@ -141,7 +141,7 @@ export default function RestaurantMenu({
 
     // Load user and user-submitted items
     useEffect(() => {
-        const userData = localStorage.getItem('tourex_user');
+        const userData = localStorage.getItem('vextrip_user');
         if (userData) {
             try {
                 setCurrentUser(JSON.parse(userData));
@@ -161,7 +161,7 @@ export default function RestaurantMenu({
 
     const initializeMockDataInStorage = () => {
         try {
-            const existingItems = localStorage.getItem('tourex_menu_items');
+            const existingItems = localStorage.getItem('vextrip_menu_items');
 
             // If no items exist or empty array, initialize with mock data for this restaurant
             if (!existingItems || JSON.parse(existingItems).length === 0) {
@@ -179,7 +179,7 @@ export default function RestaurantMenu({
                         createdBy: {
                             userId: 0,
                             userName: "Chef Martín",
-                            userEmail: "chef@tourex.com"
+                            userEmail: "chef@vextrip.com"
                         },
                         timestamp: new Date().toISOString(),
                         status: 'approved'
@@ -197,7 +197,7 @@ export default function RestaurantMenu({
                         createdBy: {
                             userId: 0,
                             userName: "Chef Martín",
-                            userEmail: "chef@tourex.com"
+                            userEmail: "chef@vextrip.com"
                         },
                         timestamp: new Date().toISOString(),
                         status: 'approved'
@@ -215,7 +215,7 @@ export default function RestaurantMenu({
                         createdBy: {
                             userId: 0,
                             userName: "Chef Martín",
-                            userEmail: "chef@tourex.com"
+                            userEmail: "chef@vextrip.com"
                         },
                         timestamp: new Date().toISOString(),
                         status: 'approved'
@@ -233,7 +233,7 @@ export default function RestaurantMenu({
                         createdBy: {
                             userId: 0,
                             userName: "Chef Martín",
-                            userEmail: "chef@tourex.com"
+                            userEmail: "chef@vextrip.com"
                         },
                         timestamp: new Date().toISOString(),
                         status: 'approved'
@@ -241,7 +241,7 @@ export default function RestaurantMenu({
                 ];
 
                 // Save to storage
-                localStorage.setItem('tourex_menu_items', JSON.stringify(mockMenuItems));
+                localStorage.setItem('vextrip_menu_items', JSON.stringify(mockMenuItems));
                 console.log(`🍽️ Mock menu items initialized for restaurant ${restaurantId}:`, mockMenuItems.length);
 
                 // Immediately load the new items
@@ -275,7 +275,7 @@ export default function RestaurantMenu({
                     ];
 
                     const updatedItems = [...allItems, ...mockItems];
-                    localStorage.setItem('tourex_menu_items', JSON.stringify(updatedItems));
+                    localStorage.setItem('vextrip_menu_items', JSON.stringify(updatedItems));
                     setUserSubmittedItems(mockItems);
                     console.log(`🍽️ Added mock items for restaurant ${restaurantId}`);
                 }
@@ -287,7 +287,7 @@ export default function RestaurantMenu({
 
     const loadUserSubmittedItems = () => {
         try {
-            const allSubmittedItems = JSON.parse(localStorage.getItem('tourex_menu_items') || '[]');
+            const allSubmittedItems = JSON.parse(localStorage.getItem('vextrip_menu_items') || '[]');
             const restaurantItems = allSubmittedItems.filter(
                 (item: any) => item.restaurantId === restaurantId && item.status === 'approved'
             );
@@ -302,7 +302,7 @@ export default function RestaurantMenu({
 
     const loadUserTables = () => {
         try {
-            const allTables = JSON.parse(localStorage.getItem('tourex_tables') || '[]');
+            const allTables = JSON.parse(localStorage.getItem('vextrip_tables') || '[]');
             const restaurantTables = allTables.filter(
                 (table: any) => table.restaurantId === restaurantId
             );
@@ -315,7 +315,7 @@ export default function RestaurantMenu({
 
     const loadUserCategories = () => {
         try {
-            const allCategories = JSON.parse(localStorage.getItem('tourex_categories') || '[]');
+            const allCategories = JSON.parse(localStorage.getItem('vextrip_categories') || '[]');
             const restaurantCategories = allCategories.filter(
                 (category: any) => category.restaurantId === restaurantId
             );
@@ -329,9 +329,9 @@ export default function RestaurantMenu({
     const deleteMenuItem = (itemId: number) => {
         if (confirm('¿Estás seguro de que quieres eliminar este plato?')) {
             try {
-                const allItems = JSON.parse(localStorage.getItem('tourex_menu_items') || '[]');
+                const allItems = JSON.parse(localStorage.getItem('vextrip_menu_items') || '[]');
                 const updatedItems = allItems.filter((item: any) => item.id !== itemId);
-                localStorage.setItem('tourex_menu_items', JSON.stringify(updatedItems));
+                localStorage.setItem('vextrip_menu_items', JSON.stringify(updatedItems));
                 loadUserSubmittedItems();
                 console.log('🗑️ Menu item deleted:', itemId);
             } catch (error) {
@@ -343,9 +343,9 @@ export default function RestaurantMenu({
     const deleteTable = (tableId: string) => {
         if (confirm('¿Estás seguro de que quieres eliminar esta mesa?')) {
             try {
-                const allTables = JSON.parse(localStorage.getItem('tourex_tables') || '[]');
+                const allTables = JSON.parse(localStorage.getItem('vextrip_tables') || '[]');
                 const updatedTables = allTables.filter((table: any) => table.id !== tableId);
-                localStorage.setItem('tourex_tables', JSON.stringify(updatedTables));
+                localStorage.setItem('vextrip_tables', JSON.stringify(updatedTables));
                 loadUserTables();
                 console.log('🗑️ Table deleted:', tableId);
             } catch (error) {
@@ -357,9 +357,9 @@ export default function RestaurantMenu({
     const deleteCategory = (categoryId: string) => {
         if (confirm('¿Estás seguro de que quieres eliminar esta categoría?')) {
             try {
-                const allCategories = JSON.parse(localStorage.getItem('tourex_categories') || '[]');
+                const allCategories = JSON.parse(localStorage.getItem('vextrip_categories') || '[]');
                 const updatedCategories = allCategories.filter((category: any) => category.id !== categoryId);
-                localStorage.setItem('tourex_categories', JSON.stringify(updatedCategories));
+                localStorage.setItem('vextrip_categories', JSON.stringify(updatedCategories));
                 loadUserCategories();
                 console.log('🗑️ Category deleted:', categoryId);
             } catch (error) {

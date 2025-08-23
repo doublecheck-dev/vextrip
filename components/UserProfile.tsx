@@ -42,7 +42,7 @@ export default function UserProfile({ isOpen, onClose }: UserProfileProps) {
 
   const loadUserData = () => {
     try {
-      const userData = localStorage.getItem('tourex_user');
+      const userData = localStorage.getItem('vextrip_user');
       if (userData) {
         setCurrentUser(JSON.parse(userData));
       }
@@ -53,7 +53,7 @@ export default function UserProfile({ isOpen, onClose }: UserProfileProps) {
 
   const loadQRRecords = () => {
     try {
-      const records = localStorage.getItem('tourex_qr_records');
+      const records = localStorage.getItem('vextrip_qr_records');
       if (records) {
         const allRecords = JSON.parse(records);
         // Filter records for current user

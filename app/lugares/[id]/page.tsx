@@ -263,7 +263,7 @@ export default function LugarDetailPage({ params }: { params: { id: string } }) 
       <WhatsAppQR 
         phoneNumber="+57 312 685-3970"
         message={`Hola! Me interesa obtener más información sobre ${lugar.name}. ¿Podrían brindarme detalles sobre cómo visitarlo y qué actividades se pueden realizar?`}
-        businessName={`${lugar.name} - TourEx`}
+        businessName={`${lugar.name} - vextrip`}
       />
     </div>
   );

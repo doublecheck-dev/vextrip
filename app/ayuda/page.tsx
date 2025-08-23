@@ -18,8 +18,8 @@ export default function AyudaPage() {
       {/* WhatsApp QR Component */}
       <WhatsAppQR 
         phoneNumber="+57 312 685-3970"
-        message="Hola! Necesito ayuda con los servicios de TourEx. ¿Podrían asistirme con mi consulta?"
-        businessName="Soporte TourEx"
+        message="Hola! Necesito ayuda con los servicios de vextrip. ¿Podrían asistirme con mi consulta?"
+        businessName="Soporte vextrip"
       />
     </div>
   );

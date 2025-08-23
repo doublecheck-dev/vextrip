@@ -26,7 +26,7 @@ export default function TablePage({ params }: TablePageProps) {
 
   const loadTableInfo = () => {
     try {
-      const allTables = JSON.parse(localStorage.getItem('tourex_tables') || '[]');
+      const allTables = JSON.parse(localStorage.getItem('vextrip_tables') || '[]');
       const foundTable = allTables.find((t: any) => t.id === params.tableId);
       setTable(foundTable);
     } catch (error) {

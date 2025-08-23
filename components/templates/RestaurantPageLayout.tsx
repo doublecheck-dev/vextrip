@@ -42,7 +42,7 @@ export default function RestaurantPageLayout({
         <WhatsAppQR 
           phoneNumber={phoneNumber}
           message={`Hola! Me interesa consultar sobre el menú de ${restaurantName}. ¿Podrían brindarme más información?`}
-          businessName={`Menú ${restaurantName} - TourEx`}
+          businessName={`Menú ${restaurantName} - vextrip`}
         />
       )}
     </div>

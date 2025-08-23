@@ -7,7 +7,7 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
-              Tourex
+              vextrip
             </h3>
             <p className="text-gray-300 text-sm leading-relaxed">
               Experience the finest culinary journeys and unforgettable dining adventures with us.
@@ -60,7 +60,7 @@ export default function Footer() {
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
                 </svg>
-                <span className="text-gray-300 text-sm">info@tourex.com</span>
+                <span className="text-gray-300 text-sm">info@vextrip.com</span>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
             <div className="text-center md:text-left">
               <p className="text-gray-400 text-sm">
-                © {new Date().getFullYear()} Tourex Experience. All rights reserved.
+                © {new Date().getFullYear()} vextrip Experience. All rights reserved.
               </p>
             </div>
             
