@@ -28,7 +28,8 @@ export default function RestaurantMenuPage({ params }: { params: { id: string } 
       backHref={`/restaurantes/${restaurant.id}`}
       backText="Volver al restaurante"
       backgroundIcons={['🍽️', '🥘', '🍜', '🍕']}
-      gradientColors="from-orange-500 to-red-500"
+      gradientColors="from-orange-400 to-red-500"
+      backgroundImage="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&h=800&fit=crop&crop=center"
     />
   );
 

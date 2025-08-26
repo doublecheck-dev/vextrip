@@ -8,7 +8,7 @@ export default function BackgroundPattern({
   opacity = 10 
 }: BackgroundPatternProps) {
   const positions = [
-    'top-20 left-10 text-6xl',
+    'top-40 left-10 text-6xl',
     'top-40 right-20 text-4xl',
     'bottom-20 left-1/4 text-5xl',
     'bottom-40 right-1/3 text-3xl'
