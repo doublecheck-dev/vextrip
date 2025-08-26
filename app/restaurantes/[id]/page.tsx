@@ -1,7 +1,7 @@
 'use client';
 import Link from "next/link";
 import { ChefHat, Shield, Wifi, Car, TreePine, CreditCard, Utensils } from "lucide-react";
-import { restaurants } from "@/lib/restaurants-data";
+import Head from "next/head";
 import WhatsAppQR from "@/components/WhatsAppQR";
 import RestaurantMenu from "@/components/RestaurantMenu";
 import ErrorState from "@/components/organisms/ErrorState";
@@ -12,24 +12,42 @@ import ReservationCard from "@/components/organisms/ReservationCard";
 import ContactInfo from "@/components/organisms/ContactInfo";
 import PoliciesSection from "@/components/organisms/PoliciesSection";
 import DescriptionSection from "@/components/organisms/DescriptionSection";
+import { useRestaurantData } from "@/lib/hooks/useRestaurantData";
 import { useState, useEffect } from 'react';
 
-const getAmenityIcon = (amenity: string) => {
-  switch (amenity.toLowerCase()) {
+const getIconComponent = (iconType: string) => {
+  switch (iconType) {
     case 'wifi': return <Wifi className="w-4 h-4 text-white" />;
-    case 'estacionamiento': return <Car className="w-4 h-4 text-white" />;
-    case 'terraza': return <TreePine className="w-4 h-4 text-white" />;
-    case 'tarjetas de crédito': return <CreditCard className="w-4 h-4 text-white" />;
-    case 'seguridad': return <Shield className="w-4 h-4 text-white" />;
+    case 'car': return <Car className="w-4 h-4 text-white" />;
+    case 'tree': return <TreePine className="w-4 h-4 text-white" />;
+    case 'credit-card': return <CreditCard className="w-4 h-4 text-white" />;
+    case 'shield': return <Shield className="w-4 h-4 text-white" />;
+    case 'chef-hat': return <ChefHat className="w-5 h-5 text-white" />;
     default: return <Utensils className="w-4 h-4 text-white" />;
   }
 };
 
-const getSpecialtyIcon = () => <ChefHat className="w-5 h-5 text-white" />;
-
 export default function RestaurantDetailPage({ params }: { params: { id: string } }) {
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const restaurant = restaurants.find(r => r.id === parseInt(params.id));
+  const restaurantId = parseInt(params.id);
+  
+  // Use the custom hook to get restaurant data and component props
+  const {
+    restaurant,
+    loading,
+    error,
+    getHeroSectionProps,
+    getRestaurantGalleryProps,
+    getDescriptionSectionProps,
+    getFeatureListProps,
+    getPoliciesSectionProps,
+    getReservationCardProps,
+    getContactInfoProps,
+    getWhatsAppProps,
+    getAmenityIconType,
+    getSpecialtyIconType,
+    getPageMetadata
+  } = useRestaurantData(restaurantId);
 
   useEffect(() => {
     const userData = localStorage.getItem('vextrip_user');
@@ -52,10 +70,23 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
     }
   };
 
-  if (!restaurant) {
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-500"></div>
+          <p className="mt-4 text-gray-600">Cargando restaurante...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error || !restaurant) {
     return (
       <ErrorState
-        title="Restaurante no encontrado"
+        title={error || "Restaurante no encontrado"}
         linkHref="/gastronomia"
         linkText="Volver a restaurantes"
         className="bg-gradient-to-br from-gray-50 to-gray-100"
@@ -63,98 +94,116 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
     );
   }
 
+  // Get all component props using the hook
+  const heroSectionProps = getHeroSectionProps();
+  const galleryProps = getRestaurantGalleryProps();
+  const descriptionProps = getDescriptionSectionProps();
+  const cuisineListProps = getFeatureListProps('cuisine');
+  const amenitiesListProps = getFeatureListProps('amenities');
+  const policiesProps = getPoliciesSectionProps();
+  const reservationProps = getReservationCardProps();
+  const contactProps = getContactInfoProps();
+  const whatsappProps = getWhatsAppProps();
+  const pageMetadata = getPageMetadata('restaurant');
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <RestaurantHero
-        restaurant={restaurant}
-        currentUser={currentUser}
-        onScrollToReservation={scrollToReservation}
-      />
+    <>
+      {pageMetadata && (
+        <Head>
+          <title>{pageMetadata.title}</title>
+          <meta name="description" content={pageMetadata.description} />
+          <meta name="keywords" content={pageMetadata.keywords.join(', ')} />
+          <meta property="og:title" content={pageMetadata.title} />
+          <meta property="og:description" content={pageMetadata.description} />
+          <meta property="og:image" content={pageMetadata.image} />
+          <meta property="og:type" content="restaurant" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={pageMetadata.title} />
+          <meta name="twitter:description" content={pageMetadata.description} />
+          <meta name="twitter:image" content={pageMetadata.image} />
+        </Head>
+      )}
+      
+      <div className="min-h-screen bg-gray-50">
+        <RestaurantHero
+          restaurant={heroSectionProps?.restaurant || {
+            id: restaurant.id,
+            name: restaurant.name,
+            image: restaurant.image,
+            rating: restaurant.rating,
+            reviews: restaurant.reviews,
+            location: `${restaurant.location.address}, ${restaurant.location.neighborhood}`,
+            openHours: 'Consultar horarios',
+            reservationRequired: restaurant.reservationRequired
+          }}
+          currentUser={currentUser}
+          onScrollToReservation={scrollToReservation}
+        />
 
-      <RestaurantGallery
-        gallery={restaurant.gallery}
-        restaurantName={restaurant.name}
-      />
+        {galleryProps && (
+          <RestaurantGallery {...galleryProps} />
+        )}
 
-      <div className="max-w-7xl mx-auto px-4 pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Description */}
-            <DescriptionSection
-              title="Sobre el restaurante"
-              icon={<Utensils />}
-              description={restaurant.description}
-              longDescription={restaurant.longDescription}
-              bgColor="bg-white"
-              iconColor="text-orange-500"
-              titleColor="text-gray-800"
-              textColor="text-gray-600"
-            />
+        <div className="max-w-7xl mx-auto px-4 pb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Description */}
+              {descriptionProps && (
+                <DescriptionSection
+                  {...descriptionProps}
+                  icon={<Utensils />}
+                />
+              )}
 
-            {/* Specialties */}
-            <FeatureList
-              items={restaurant.specialties}
-              getIcon={getSpecialtyIcon}
-              title="Especialidades"
-              titleIcon={<ChefHat className="w-8 h-8 text-white" />}
-              bgGradient="from-orange-50 to-red-50"
-              borderColor="border-orange-100"
-              iconBgColor="bg-orange-500"
-            />
+              {/* Specialties */}
+              {cuisineListProps && (
+                <FeatureList
+                  {...cuisineListProps}
+                  getIcon={() => getIconComponent(getSpecialtyIconType())}
+                  titleIcon={<ChefHat className="w-8 h-8 text-white" />}
+                />
+              )}
 
-            {/* Menu Section */}
-            <RestaurantMenu
-              goToMenuPage={true}
-              restaurantId={restaurant.id}
-              restaurantName={restaurant.name}
-            />
+              {/* Menu Section */}
+              <RestaurantMenu
+                goToMenuPage={true}
+                restaurantId={restaurant.id}
+                restaurantName={restaurant.name}
+              />
 
-            {/* Amenities */}
-            <FeatureList
-              items={restaurant.amenities}
-              getIcon={getAmenityIcon}
-              title="Servicios y Comodidades"
-              titleIcon={<Utensils className="w-8 h-8 text-white" />}
-              bgGradient="from-green-50 to-blue-50"
-              borderColor="border-green-100"
-              iconBgColor="bg-green-500"
-            />
+              {/* Amenities */}
+              {amenitiesListProps && (
+                <FeatureList
+                  {...amenitiesListProps}
+                  getIcon={(amenity: string) => getIconComponent(getAmenityIconType(amenity))}
+                  titleIcon={<Utensils className="w-8 h-8 text-white" />}
+                />
+              )}
 
-            {/* Policies */}
-            <PoliciesSection
-              policies={restaurant.policies}
-              title="Políticas del Restaurante"
-              bgColor="bg-white"
-              bulletColor="bg-orange-500"
-              textColor="text-gray-700"
-              itemBgColor="bg-gray-50"
-            />
-          </div>
+              {/* Policies */}
+              {policiesProps && (
+                <PoliciesSection {...policiesProps} />
+              )}
+            </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            <ReservationCard
-              priceRange={restaurant.priceRange}
-              reservationRequired={restaurant.reservationRequired}
-            />
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {reservationProps && (
+                <ReservationCard {...reservationProps} />
+              )}
 
-            <ContactInfo
-              phone={restaurant.phone}
-              email={restaurant.email}
-              address={restaurant.address}
-              openHours={restaurant.openHours}
-              website={restaurant.website}
-            />
+              {contactProps && (
+                <ContactInfo {...contactProps} />
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <WhatsAppQR
-        phoneNumber="+57 312 685-3970"
-        message={`Hola! Me interesa hacer una reserva en ${restaurant.name}. ¿Podrían brindarme información sobre disponibilidad y el menú?`}
-        businessName={`${restaurant.name} - vextrip`}
-      />
-    </div>
+        {whatsappProps && (
+          <WhatsAppQR {...whatsappProps} />
+        )}
+      </div>
+    </>
   );
 }
