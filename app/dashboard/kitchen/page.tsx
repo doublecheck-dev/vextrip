@@ -215,7 +215,7 @@ export default function KitchenDashboard() {
         </div>
 
         {/* Orders List */}
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
           {loading ? (
             <div className="text-center py-12">
               <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-gray-400" />
@@ -237,7 +237,7 @@ export default function KitchenDashboard() {
               />
             ))
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
