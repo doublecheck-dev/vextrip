@@ -80,7 +80,9 @@ export class KitchenDataService {
 
     if (order.notes) instructions.push(order.notes);
     
-    return [...new Set(instructions)];
+
+    return Array.from(new Set(instructions));
+
   }
 
   // Filtering Services
@@ -99,7 +101,9 @@ export class KitchenDataService {
       const searchLower = filters.searchTerm.toLowerCase();
       filtered = filtered.filter(order => 
         order.customerInfo.name.toLowerCase().includes(searchLower) ||
-        order.id.toLowerCase().includes(searchLower) ||
+
+        order.id.toString().toLowerCase().includes(searchLower) ||
+
         order.items.some(item => item.menuItemId.toString().includes(searchLower))
       );
     }
@@ -285,7 +289,9 @@ export class KitchenDataService {
     newStatus: OrderStatus
   ): KitchenOrder[] {
     const updatedOrders = orders.map(order => {
-      if (order.id === orderId) {
+
+      if (order.id.toString() === orderId.toString()) {
+
         const updatedOrder = { ...order, status: newStatus };
         
         // Add timestamps based on status
