@@ -3,7 +3,7 @@ import { Restaurant, MenuCategory, MenuItem, PriceRange, OrderStatus } from './m
 export const restaurantsDatabase: Restaurant[] = [
   {
     id: 1,
-    name: "La Terraza Dorada",
+    name: "Magia Natural",
     slug: "la-terraza-dorada",
     description: "Experiencia gastronómica única con vista panorámica de la ciudad",
     category: "Gastronomía Internacional",
@@ -30,7 +30,7 @@ export const restaurantsDatabase: Restaurant[] = [
       website: "https://laterrazadorada.com",
       socialMedia: {
         instagram: "@laterrazadorada",
-        facebook: "La Terraza Dorada",
+        facebook: "Magia Natural",
         twitter: "@laterrazadorada"
       }
     },
