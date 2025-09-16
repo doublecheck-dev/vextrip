@@ -34,7 +34,7 @@ export default function HeroContent({
       </div>
 
       {/* Info card with neon border */}
-      <div className="inline-block backdrop-blur-2xl bg-white/5 rounded-3xl p-8 border border-purple-400/30 shadow-2xl shadow-purple-900/25 hover:shadow-purple-500/40 transition-all duration-500">
+      <div className="inline-block backdrop-blur-7xl bg-white/5 rounded-3xl p-8 border border-purple-400/30 shadow-2xl shadow-purple-900/25 hover:shadow-purple-500/40 transition-all duration-500">
         <HeroInfo 
           location={restaurant?.location}
           openHours={restaurant?.openHours}
