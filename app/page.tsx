@@ -1,9 +1,12 @@
+'use client';
 import HeroBanner from "@/components/HeroBanner";
 import Testimonials from "@/components/Testimonials";
 import TourSlider from "@/components/TourSlider";
 import Services from "@/components/Services";
 import RestaurantPreview from "@/components/RestaurantPreview";
 import WhatsAppQR from "@/components/WhatsAppQR";
+
+import { useEffect } from "react";
 
 export default function Home() {
   return (

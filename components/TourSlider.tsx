@@ -5,6 +5,7 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import { useRef } from 'react';
+import type { Swiper as SwiperClass } from 'swiper';
 
 const places = [
   {
@@ -38,9 +39,8 @@ const places = [
     image: 'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?auto=format&fit=crop&w=800&q=80',
   },
 ];
-
 export default function TourSlider() {
-  const swiperRef = useRef(null);
+  const swiperRef = useRef<SwiperClass | null>(null);
 
   // Modern gradient colors for each slide
   const gradients = [

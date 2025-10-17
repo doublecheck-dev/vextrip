@@ -2,16 +2,54 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Star, MapPin, Clock, Phone, ExternalLink } from "lucide-react";
-import { restaurants } from "@/lib/restaurants-data";
 import WhatsAppQR from "@/components/WhatsAppQR";
+import { useEffect } from "react";
+import { useState } from "react";
+import RegisterRestaurantCTA from "@/components/atoms/RegisterRestaurantCTA";
+import RegisterRestaurantModal from "@/components/organisms/RegisterRestaurantModal";
+
+type Restaurant = {
+	id?: string | number;
+	name?: string;
+	image?: string;
+	featured?: boolean;
+	price_range?: string;
+	priceRange?: string;
+	rating?: number;
+	reviews?: number;
+	description?: string;
+	location?: string;
+	open_hours?: string;
+	openHours?: string;
+	phone?: string;
+	specialties?: string[];
+	cuisine?: string;
+	[key: string]: any;
+};
 
 export default function RestaurantesPage() {
-	const featuredRestaurants = restaurants.filter(
-		(restaurant) => restaurant.featured
-	);
-	const regularRestaurants = restaurants.filter(
-		(restaurant) => !restaurant.featured
-	);
+	const [restaurantsData, setRestaurantsData] = useState<{ success: boolean; data: Restaurant[] }>({
+		success: false,
+		data: []
+	});
+	const [showForm, setShowForm] = useState<boolean>(false);
+
+	useEffect(() => {
+		fetch('/api/restaurants', {
+			method: 'GET',
+			headers: { 'Content-Type': 'application/json' }
+		})
+			.then(r => r.json())
+			.then(data => {setRestaurantsData(data), console.log('dfdfd', data)});
+	}, []);
+
+	console.log('restaurantsDatadfdf', restaurantsData.data);
+
+
+	const featuredRestaurants =
+		restaurantsData?.data?.filter((restaurant) => restaurant?.featured)
+	const regularRestaurants = 
+		restaurantsData?.data?.filter((restaurant) => !restaurant?.featured)
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-slate-50 to-orange-50">
@@ -58,8 +96,8 @@ export default function RestaurantesPage() {
 								>
 									<div className="relative h-64 md:h-80">
 										<Image
-											src={restaurant.image}
-											alt={restaurant.name}
+											src={restaurant.image ?? '/images/placeholder-restaurant.jpg'}
+											alt={restaurant.name ?? 'Restaurant'}
 											fill
 											className="object-cover"
 											sizes="(max-width: 768px) 100vw, 50vw"
@@ -71,7 +109,7 @@ export default function RestaurantesPage() {
 										</div>
 										<div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1">
 											<span className="text-orange-600 font-bold">
-												{restaurant.priceRange}
+												{restaurant.price_range}
 											</span>
 										</div>
 									</div>
@@ -106,7 +144,7 @@ export default function RestaurantesPage() {
 											<div className="flex items-center gap-2 text-gray-700">
 												<Clock className="w-4 h-4 text-orange-500" />
 												<span className="text-sm">
-													{restaurant.openHours}
+													{restaurant.open_hours}
 												</span>
 											</div>
 											<div className="flex items-center gap-2 text-gray-700">
@@ -122,7 +160,7 @@ export default function RestaurantesPage() {
 												Especialidades:
 											</span>
 											<div className="flex flex-wrap gap-2">
-												{restaurant.specialties.map((specialty, idx) => (
+												{(restaurant.specialties ?? []).map((specialty, idx) => (
 													<span
 														key={idx}
 														className="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs"
@@ -165,8 +203,8 @@ export default function RestaurantesPage() {
 							>
 								<div className="relative h-48">
 									<Image
-										src={restaurant.image}
-										alt={restaurant.name}
+										src={restaurant.image ?? '/images/placeholder-restaurant.jpg'}
+										alt={restaurant.name ?? 'Restaurant'}
 										fill
 										className="object-cover"
 										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -212,7 +250,7 @@ export default function RestaurantesPage() {
 
 									<div className="mb-3">
 										<div className="flex flex-wrap gap-1">
-											{restaurant.specialties
+											{(restaurant.specialties ?? [])
 												.slice(0, 2)
 												.map((specialty, idx) => (
 													<span
@@ -222,10 +260,10 @@ export default function RestaurantesPage() {
 														{specialty}
 													</span>
 												))}
-											{restaurant.specialties.length > 2 && (
+											{(restaurant.specialties ?? []).length > 2 && (
 												<span className="text-orange-500 text-xs">
 													+
-													{restaurant.specialties.length - 2} más
+													{(restaurant.specialties ?? []).length - 2} más
 												</span>
 											)}
 										</div>
@@ -257,14 +295,27 @@ export default function RestaurantesPage() {
 					<p className="text-lg mb-6 opacity-90">
 						Únete a nuestra plataforma y conecta con más clientes
 					</p>
-					<button className="bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300">
-						Registrar Restaurante
-					</button>
+					<RegisterRestaurantCTA onClick={() => setShowForm(true)} />
+					{showForm && (
+						<RegisterRestaurantModal
+							onClose={() => setShowForm(false)}
+							onSuccess={() => {
+								setShowForm(false);
+								// Refresca la lista de restaurantes después de guardar
+								fetch('/api/restaurants', {
+									method: 'GET',
+									headers: { 'Content-Type': 'application/json' }
+								})
+									.then(r => r.json())
+									.then(data => setRestaurantsData(data));
+							}}
+						/>
+					)}
 				</section>
 			</div>
 
 			{/* WhatsApp QR Component */}
-			<WhatsAppQR 
+			<WhatsAppQR
 				phoneNumber="+57 312 685-3970"
 				message="Hola! Me interesa conocer más sobre los restaurantes recomendados en San Rafael. ¿Podrían brindarme información sobre opciones gastronómicas?"
 				businessName="Gastronomía vextrip"

@@ -23,18 +23,21 @@
         "name": "next"
       }
     ],
-     "baseUrl": ".",
-        "paths": {
-      "@/*": ["./*"]
-    }
-
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "next.config.js"  ],
+    ".next/types/**/*.ts",
+    "next.config.js"
+  ],
   "exclude": [
     "node_modules"
   ]

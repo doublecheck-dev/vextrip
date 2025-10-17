@@ -194,7 +194,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
               )}
 
               {contactProps && (
-                <ContactInfo {...contactProps} />
+                <ContactInfo {...contactProps} website={contactProps.website ?? ''} />
               )}
             </div>
           </div>

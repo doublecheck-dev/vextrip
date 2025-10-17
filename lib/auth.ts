@@ -1,5 +1,27 @@
 import { getDB, User } from './database';
 import bcrypt from 'bcryptjs';
+import { supabase } from './supabaseClient';
+
+export async function supabaseSignUp(email: string, password: string) {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+  return { user: data.user, error };
+}
+
+export async function supabaseSignIn(email: string, password: string) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  return { user: data.user, error };
+}
+
+export async function supabaseSignOut() {
+  const { error } = await supabase.auth.signOut();
+  return { error };
+}
 
 export class AuthService {
   static async hashPassword(password: string): Promise<string> {

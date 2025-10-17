@@ -84,7 +84,7 @@ export default function OrderCard({
         status={order.status}
         totalPrice={order.totalPrice}
         timestamp={order.timestamp}
-        tableNumber={tableNumber}
+        tableNumber={tableNumber ?? '0'}
         isDelivery={isDelivery}
         isFocused={isFocused}
         userComments={userComments}
@@ -96,7 +96,7 @@ export default function OrderCard({
         onToggleExpansion={onToggleExpansion}
         totalPrice={order.totalPrice}
         userComments={userComments}
-        tableNumber={tableNumber}
+        tableNumber={tableNumber ?? '0'}
         tableFilter={tableFilter}
         notes={order.deliveryInfo.notes}
       />
