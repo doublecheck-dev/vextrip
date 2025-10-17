@@ -7,44 +7,56 @@ import { useEffect } from "react";
 import { useState } from "react";
 import RegisterRestaurantCTA from "@/components/atoms/RegisterRestaurantCTA";
 import RegisterRestaurantModal from "@/components/organisms/RegisterRestaurantModal";
+import { fetchRestaurants } from './supabaseClient';
+import { normalizeList } from './utils';
 
 type Restaurant = {
-	id?: string | number;
+	// según backUp_database: id es integer
+	id?: number;
 	name?: string;
-	image?: string;
-	featured?: boolean;
-	price_range?: string;
-	priceRange?: string;
-	rating?: number;
-	reviews?: number;
-	description?: string;
-	location?: string;
-	open_hours?: string;
-	openHours?: string;
-	phone?: string;
-	specialties?: string[];
-	cuisine?: string;
+	description?: string | null;
+	long_description?: string | null;
+	image?: string | null;
+	gallery?: string[] | null;
+	rating?: number | string | null;
+	reviews?: number | null;
+	category?: string | null;
+	cuisine?: string | null;
+	location?: string | null; // legacy
+	address?: string | null;
+	city?: string | null;
+	price_range?: string | null;
+	phone?: string | null;
+	email?: string | null;
+	website?: string | null;
+	open_hours?: string | null;
+	featured?: boolean | null;
+	amenities?: string[] | null;
+	specialties?: string[] | null; // en backup es ARRAY
+	reservation_required?: boolean | null;
+	policies?: string[] | null;
+	metadata?: any;
+	lat?: number | null;
+	lng?: number | null;
 	[key: string]: any;
 };
 
 export default function RestaurantesPage() {
-	const [restaurantsData, setRestaurantsData] = useState<{ success: boolean; data: Restaurant[] }>({
+	const [restaurantsData, setRestaurantsData] = useState<{ success: boolean; data: Restaurant[] }>( {
 		success: false,
 		data: []
 	});
 	const [showForm, setShowForm] = useState<boolean>(false);
 
 	useEffect(() => {
-		fetch('/api/restaurants', {
-			method: 'GET',
-			headers: { 'Content-Type': 'application/json' }
-		})
-			.then(r => r.json())
-			.then(data => {setRestaurantsData(data), console.log('dfdfd', data)});
+		// usar la función separada para obtener datos
+		fetchRestaurants()
+			.then((data) => setRestaurantsData({ success: true, data }))
+			.catch((err) => {
+				console.error('Error fetching restaurants from Supabase:', err);
+				setRestaurantsData({ success: false, data: [] });
+			});
 	}, []);
-
-	console.log('restaurantsDatadfdf', restaurantsData.data);
-
 
 	const featuredRestaurants =
 		restaurantsData?.data?.filter((restaurant) => restaurant?.featured)
@@ -131,14 +143,14 @@ export default function RestaurantesPage() {
 										</div>
 
 										<p className="text-gray-600 mb-4 leading-relaxed">
-											{restaurant.description}
+											{restaurant.long_description ?? restaurant.description}
 										</p>
 
 										<div className="space-y-3 mb-4">
 											<div className="flex items-center gap-2 text-gray-700">
 												<MapPin className="w-4 h-4 text-orange-500" />
 												<span className="text-sm">
-													{restaurant.location}
+													{restaurant.address ?? restaurant.location ?? restaurant.city}
 												</span>
 											</div>
 											<div className="flex items-center gap-2 text-gray-700">
@@ -160,7 +172,7 @@ export default function RestaurantesPage() {
 												Especialidades:
 											</span>
 											<div className="flex flex-wrap gap-2">
-												{(restaurant.specialties ?? []).map((specialty, idx) => (
+												{normalizeList(restaurant.specialties).map((specialty, idx) => (
 													<span
 														key={idx}
 														className="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs"
@@ -211,7 +223,7 @@ export default function RestaurantesPage() {
 									/>
 									<div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1">
 										<span className="text-orange-600 font-bold text-sm">
-											{restaurant.priceRange}
+											{restaurant.price_range}
 										</span>
 									</div>
 								</div>
@@ -230,27 +242,27 @@ export default function RestaurantesPage() {
 									</div>
 
 									<p className="text-gray-600 mb-3 text-sm leading-relaxed line-clamp-2">
-										{restaurant.description}
+										{restaurant.long_description ?? restaurant.description}
 									</p>
 
 									<div className="space-y-2 mb-3">
 										<div className="flex items-center gap-2 text-gray-600">
 											<MapPin className="w-3 h-3 text-orange-500" />
 											<span className="text-xs">
-												{restaurant.location}
+												{restaurant.address ?? restaurant.city}
 											</span>
 										</div>
 										<div className="flex items-center gap-2 text-gray-600">
 											<Clock className="w-3 h-3 text-orange-500" />
 											<span className="text-xs">
-												{restaurant.openHours}
+												{restaurant.open_hours}
 											</span>
 										</div>
 									</div>
 
 									<div className="mb-3">
 										<div className="flex flex-wrap gap-1">
-											{(restaurant.specialties ?? [])
+											{normalizeList(restaurant.specialties)
 												.slice(0, 2)
 												.map((specialty, idx) => (
 													<span
@@ -260,10 +272,9 @@ export default function RestaurantesPage() {
 														{specialty}
 													</span>
 												))}
-											{(restaurant.specialties ?? []).length > 2 && (
+											{normalizeList(restaurant.specialties).length > 2 && (
 												<span className="text-orange-500 text-xs">
-													+
-													{(restaurant.specialties ?? []).length - 2} más
+													+{normalizeList(restaurant.specialties).length - 2} más
 												</span>
 											)}
 										</div>
@@ -323,3 +334,4 @@ export default function RestaurantesPage() {
 		</div>
 	);
 }
+				
