@@ -312,13 +312,13 @@ export default function RestaurantesPage() {
 							onClose={() => setShowForm(false)}
 							onSuccess={() => {
 								setShowForm(false);
-								// Refresca la lista de restaurantes después de guardar
-								fetch('/api/restaurants', {
-									method: 'GET',
-									headers: { 'Content-Type': 'application/json' }
-								})
-									.then(r => r.json())
-									.then(data => setRestaurantsData(data));
+								// Refresca la lista de restaurantes usando Supabase client
+								fetchRestaurants()
+									.then((data) => setRestaurantsData({ success: true, data }))
+									.catch((err) => {
+										console.error('Error fetching restaurants after save:', err);
+										setRestaurantsData({ success: false, data: [] });
+									});
 							}}
 						/>
 					)}
@@ -334,4 +334,3 @@ export default function RestaurantesPage() {
 		</div>
 	);
 }
-				
