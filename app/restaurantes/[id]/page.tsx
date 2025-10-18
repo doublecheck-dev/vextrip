@@ -125,16 +125,16 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
       )}
       
       <div className="min-h-screen bg-gray-50">
-        <RestaurantHero
-          restaurant={heroSectionProps?.restaurant || {
-            id: restaurant.id,
-            name: restaurant.name,
-            image: restaurant.image,
-            rating: restaurant.rating,
-            reviews: restaurant.reviews,
-            location: `${restaurant.location.address}, ${restaurant.location.neighborhood}`,
+      <RestaurantHero
+        restaurant={{
+          id: restaurant.id,
+          name: restaurant.name,
+          image: restaurant.image ?? '/images/placeholder-restaurant.jpg',
+          rating: restaurant.rating ?? 0,
+          reviews: restaurant.reviews ?? 0,
+          location: `${restaurant?.location?.address}, ${restaurant?.location?.neighborhood}`,
             openHours: 'Consultar horarios',
-            reservationRequired: restaurant.reservationRequired
+            reservationRequired: restaurant.reservationRequired ?? false
           }}
           currentUser={currentUser}
           onScrollToReservation={scrollToReservation}

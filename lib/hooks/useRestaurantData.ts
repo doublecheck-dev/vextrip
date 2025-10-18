@@ -8,31 +8,37 @@ export function useRestaurantData(restaurantId: number) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let mounted = true;
     const fetchRestaurant = async () => {
       try {
         setLoading(true);
-        const restaurantData = DataService.getRestaurantById(restaurantId);
+        const restaurantData = await DataService.getRestaurantById(restaurantId);
         
         if (!restaurantData) {
-          setError('Restaurante no encontrado');
+          if (mounted) {
+            setError('Restaurante no encontrado');
+            setRestaurant(null);
+          }
           return;
         }
         
-        setRestaurant(restaurantData);
+        if (mounted) setRestaurant(restaurantData as unknown as Restaurant);
       } catch (err) {
-        setError('Error al cargar los datos del restaurante');
+        console.error('useRestaurantData fetch error', err);
+        if (mounted) setError('Error al cargar los datos del restaurante');
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
 
     fetchRestaurant();
+    return () => { mounted = false; };
   }, [restaurantId]);
 
-  // Component data getters
+  // Component data getters (pass restaurant object to DataService helpers)
   const getHeroSectionProps = () => {
     if (!restaurant) return null;
-    return DataService.getHeroSectionData(restaurant.id);
+    return DataService.getHeroSectionData(restaurant);
   };
 
   const getFloatingNavigationProps = (backHref: string, backText: string) => {
@@ -51,7 +57,7 @@ export function useRestaurantData(restaurantId: number) {
 
   const getHeroActionsProps = (currentUser: any) => {
     if (!restaurant) return null;
-    return DataService.getHeroActionsData(restaurant, currentUser);
+    return DataService.getHeroSectionData(restaurant);
   };
 
   const getPageMetadata = (pageType: string) => {

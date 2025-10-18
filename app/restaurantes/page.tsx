@@ -58,10 +58,8 @@ export default function RestaurantesPage() {
 			});
 	}, []);
 
-	const featuredRestaurants =
-		restaurantsData?.data?.filter((restaurant) => restaurant?.featured)
-	const regularRestaurants = 
-		restaurantsData?.data?.filter((restaurant) => !restaurant?.featured)
+	const featuredRestaurants = (restaurantsData?.data ?? []).filter((restaurant) => !!restaurant?.featured);
+	const regularRestaurants = (restaurantsData?.data ?? []).filter((restaurant) => !restaurant?.featured);
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-slate-50 to-orange-50">
